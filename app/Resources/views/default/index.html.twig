@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home!{% endblock %}
+{% block body %}
+
+<style>
+
+    .card-image-{{ indexData.mostRecentPost.headerImage | slice(-0, -4) }} {
+        background-image: url('{{ asset('assets/images/posts/') }}{{ indexData.mostRecentPost.headerImage }}');
+    }
+
+</style>
+
+<div class="container content-container">
+    <div class="section">
+        <div class="row">
+            <div class="col l12">
+                <div class="card">
+                    <div class="card-image card-image-large card-image-{{ indexData.mostRecentPost.headerImage | slice(-0, -4) }}">
+                        <span class="card-title">{{ indexData.mostRecentPost.title }}</span>
+                    </div>
+                    <div class="card-content">
+                        <p>{{ indexData.mostRecentPost.shortDescription }}</p>
+                    </div>
+                    <div class="card-action right-align">
+
+                        <a href="{{ path('blogIndex') }}">
+                            <button class="btn waves-effect waves-light orange accent-2">View More
+                                <i class="material-icons right">list</i>
+                            </button>
+                        </a>
+
+                        <a href="{{ path('blogPost', {'slug': indexData.mostRecentPost.slug}) }}">
+                            <button class="btn waves-effect waves-light orange accent-2">Read Now
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </a>
+
+                        <button href="#sign-in-modal" class="waves-effect waves-light modal-trigger orange accent-2">Sign-in
+                            <i class="material-icons right">lock_outline</i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col l12">
+                <div class="card">
+                    <div class="card-content white-text blue-grey darken-1">
+                        <span class="card-title">" {{ indexData.quote.message }} "</span>
+                        <p>- {{ indexData.quote.author }}</p>
+                    </div>
+                    <div class="card-content">
+                        <p>{{ indexData.quote.comment|slice(0, 200)~'...' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

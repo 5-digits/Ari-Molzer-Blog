@@ -1,0 +1,61 @@
+a {
+  color: inherit; }
+  a:hover {
+    text-decoration: none;
+    color: inherit; }
+
+body {
+  background: url("../images/bg.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
+
+h1, h2, h3, h4, h5 {
+  font-weight: 300; }
+
+html {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300; }
+
+.card .card-image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; }
+  .card .card-image.card-image-large {
+    height: 300px;
+    overflow-y: hidden; }
+    .card .card-image.card-image-large img {
+      color: #000; }
+.card .card-title h1 {
+  font-size: 2.0rem;
+  margin: 0 0 0 10px; }
+.card .card-title h3 {
+  font-size: 1.5rem;
+  margin: 10px 0 0 10px; }
+.card .card-content-body {
+  text-align: justify; }
+@media screen and (max-width: 600px) {
+  .card.horizontal {
+    display: block; } }
+.card.horizontal .card-image {
+  width: 50%;
+  max-width: 50%;
+  height: initial;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; }
+  @media screen and (max-width: 600px) {
+    .card.horizontal .card-image {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: 200px; } }
+
+.container.content-container {
+  padding: 50px 0; }
+
+nav .nav-wrapper {
+  margin-top: 20px; }
+
+/*# sourceMappingURL=styles.css.map */

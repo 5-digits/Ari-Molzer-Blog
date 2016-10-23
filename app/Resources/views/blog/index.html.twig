@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog Browser | Ari Molzer{% endblock %}
+{% block body %}
+
+<div class="container content-container">
+    <div class="section">
+        <div class="row">
+
+            {% for post in posts %}
+
+                {{ include('blog/components/card-horizontal.html.twig', { 'post': post }) }}
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

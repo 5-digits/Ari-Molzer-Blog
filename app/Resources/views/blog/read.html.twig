@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }} | Ari Molzer{% endblock %}
+
+{% block body %}
+
+{% spaceless %}
+<style>
+    .card-image-large {
+        background: url({{ asset('assets/images/posts/') }}{{ post.headerImage }});
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+</style>
+{% endspaceless %}
+
+<input type="hidden" id="postId" name="postId" value="" />
+
+<div class="container content-container">
+
+    <div class="section">
+        <div class="row">
+            <div class="col l12">
+                <div class="card">
+                    <div class="card-image card-image-large">
+                        <span class="card-title">
+                            <h1>{{ post.title }}</h1>
+                            <h3>{{ post.subtitle }}</h3>
+                        </span>
+                    </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col m8 offset-m2">
+
+                                <div class="col m6">
+                                    <div class="left-align">
+                                        <div class="chip">
+                                            <img src="{{ asset('assets/images/users/1.jpg') }}" alt="Author">
+                                            Ari Molzer
+                                        </div>
+                                        <div class="chip">
+                                            2 days ago
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col m6">
+                                    <div class="grey-text text-darken-2 right-align">
+                                        <a href="#">
+                                            <i class="material-icons">favorite</i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="material-icons">bookmark</i>
+                                        </a>
+                                        <a class="no-decorate" href="#">
+                                            <i class="material-icons">share</i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <p class="card-content-body">{{ post.body }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

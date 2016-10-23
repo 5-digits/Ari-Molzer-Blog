@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome to My Site{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+        {# todo - add metadata, seo and title from a site-settings entity to be customisable #}
+
+        {# Add to homescreen for Chrome on Android #}
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+        {# Add to homescreen for Safari on iOS #}
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+        <link rel="apple-touch-icon-precomposed" href="{{ asset('') }}">
+
+        {# Tile icon for Win8 (144x144 + tile color) #}
+        <meta name="msapplication-TileImage" content="{{ asset('todo') }}">
+        <meta name="msapplication-TileColor" content="#3372DF">
+
+        <!-- Import Google Icon Font -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+        <!-- Import fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+
+        <!-- include google material design styles -->
+        <link rel="stylesheet" href="{{ asset('assets/vendor/materialize/bin/materialize.css') }}" media="screen,projection">
+
+        <!-- Include JQuery -->
+        <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+
+        <!-- Include Materialize JS -->
+        <script src="{{ asset('assets/vendor/materialize/bin/materialize.js') }}"></script>
+
+        <!-- include custom CSS -->
+        <link rel="stylesheet" href="{{ asset('assets/custom/styles.css') }}">
+
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
