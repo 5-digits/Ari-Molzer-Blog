@@ -40,12 +40,31 @@ class BlogController extends Controller
      */
     public function viewBlogPostAction($slug)
     {
-
         // query for a single product by its primary key (usually "id")
         $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
         $blogPost = $repository->findOneBySlug($slug);
 
         // handle invalid slug
+        if ($blogPost === null) {
+            return new RedirectResponse($this->generateUrl('index'));
+        }
+
+        // render template
+        return $this->render('blog/read.html.twig', array(
+            'post' => $blogPost
+        ));
+    }
+
+    /**
+     * @Route("/blog/post/id/{id}", name="blogPostById")
+     */
+    public function viewBlogPostIdAction($id)
+    {
+        // query for a single product by its primary key (usually "id")
+        $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
+        $blogPost = $repository->findOneById($id);
+
+        // handle invalid id
         if ($blogPost === null) {
             return new RedirectResponse($this->generateUrl('index'));
         }

@@ -11,7 +11,10 @@
 
 </style>
 
-<div class="container content-container">
+    {{ include('admin/components/login-modal.html.twig') }}
+
+
+    <div class="container content-container">
     <div class="section">
         <div class="row">
             <div class="col l12">
@@ -36,14 +39,17 @@
                             </button>
                         </a>
 
-                        <button href="#sign-in-modal" class="waves-effect waves-light modal-trigger orange accent-2">Sign-in
-                            <i class="material-icons right">lock_outline</i>
-                        </button>
+                        <a href="javascript:$('#sign-in-modal').openModal();" class="modal-trigger">
+                            <button class="btn waves-effect waves-light modal-trigger orange accent-2">Sign In
+                                <i class="material-icons right">lock_outline</i>
+                            </button>
+                        </a>
 
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col l12">
                 <div class="card">
