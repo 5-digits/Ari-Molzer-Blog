@@ -1,0 +1,41 @@
+<style>
+
+    .card-image-{{ post.headerImage | slice(-0, -4) }} {
+        background-image: url('{{ asset('assets/images/posts/') }}{{ post.headerImage }}');
+    }
+
+</style>
+
+<div class="row">
+    <div class="col l12">
+        <div class="card">
+            <div class="card-image card-image-large card-image-{{ post.headerImage | slice(-0, -4) }}">
+                <span class="card-title">{{ post.title }}</span>
+            </div>
+            <div class="card-content">
+                <p>{{ post.shortDescription }}</p>
+            </div>
+            <div class="card-action right-align">
+
+                <a href="{{ path('blogIndex') }}">
+                    <button class="btn waves-effect waves-light orange accent-2">View More
+                        <i class="material-icons right">list</i>
+                    </button>
+                </a>
+
+                <a href="{{ path('blogPost', {'slug': post.slug}) }}">
+                    <button class="btn waves-effect waves-light orange accent-2">Read Now
+                        <i class="material-icons right">send</i>
+                    </button>
+                </a>
+
+                <a href="javascript:$('#sign-in-modal').openModal();" class="modal-trigger">
+                    <button class="btn waves-effect waves-light modal-trigger orange accent-2">Sign In
+                        <i class="material-icons right">lock_outline</i>
+                    </button>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>

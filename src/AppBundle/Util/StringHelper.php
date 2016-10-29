@@ -8,7 +8,6 @@
 
 namespace AppBundle\Util;
 
-
 class StringHelper
 {
     /**

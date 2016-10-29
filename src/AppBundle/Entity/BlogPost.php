@@ -9,6 +9,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -16,6 +17,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BlogPost
 {
+
+    const API_PUBLIC = true;
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -57,6 +61,11 @@ class BlogPost
      * @ORM\Column(name="author", type="integer")
      */
     private $author;
+
+    /**
+     * @ORM\Column(name="published", type="boolean", options={"default" : 0})
+     */
+    private $published;
 
     /**
      * @ORM\Column(name="date_created", type="datetime", length=100)
@@ -130,6 +139,22 @@ class BlogPost
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPublished()
+    {
+        return $this->published;
+    }
+
+    /**
+     * @param mixed $published
+     */
+    public function setPublished($published)
+    {
+        $this->published = $published;
     }
 
     /**

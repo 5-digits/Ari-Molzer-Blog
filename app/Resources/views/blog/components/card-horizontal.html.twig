@@ -12,9 +12,10 @@
         <div class="card-image card-image-{{ post.headerImage | slice(-0, -4) }}"></div>
         <div class="card-stacked">
             <div class="card-content">
+                <h5>{{ post.title }}</h5>
                 <p>{{ post.shortDescription }}</p>
             </div>
-            <div class="card-action right-align">
+            <div class="card-action">
                 <a href="{{ path('blogPost', {'slug': post.slug}) }}">
                     <button class="btn waves-effect waves-light orange accent-2" type="submit" name="action">Read Now
                         <i class="material-icons right">send</i>

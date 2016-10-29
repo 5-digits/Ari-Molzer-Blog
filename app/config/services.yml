@@ -10,4 +10,4 @@ services:
 
     blogs:
         class: AppBundle\Dao\BlogDao
-        arguments: [@doctrine]
+        arguments: ["@doctrine"]

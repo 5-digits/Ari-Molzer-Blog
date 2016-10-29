@@ -46,6 +46,11 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+
+        <!-- Include required JS scripts and JS block -->
+        {#{{ include('shared/includes/firebase.html.twig') }}#}
         {% block javascripts %}{% endblock %}
+
+
     </body>
 </html>

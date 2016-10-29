@@ -8,11 +8,13 @@
 
 namespace AppBundle\Dao;
 
+use AppBundle\Entity\BlogPost;
 use AppBundle\Util\StringHelper;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
 class BlogDao
 {
+
     /** @var Registry */
     private $doctrine;
 
@@ -26,25 +28,36 @@ class BlogDao
         $this->doctrine = $doctrine;
     }
 
-    function getMostRecent()
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return BlogPost[]|null
+     */
+    function getPosts($limit = 10, $offset = 0)
     {
         $em = $this->doctrine->getManager();
 
-        $blogPost = $em->getRepository('AppBundle:BlogPost')->findOneBy(
+        $blogPost = $em->getRepository('AppBundle:BlogPost')->findBy(
             array(),
-            array('id' => 'DESC')
+            array('id' => 'DESC'),
+            $limit,
+            $offset
         );
 
         return $blogPost;
     }
 
-    function getAll()
+    function getNumberOfPosts()
     {
-        $em = $this->doctrine->getManager();
+        $query = $this->doctrine->getManager()->createQueryBuilder()
+            ->select('COUNT(bp.id)')
+            ->from('AppBundle:BlogPost', 'bp')
+            ->where('bp.published = 1')
+            ->getQuery();
 
-        $allPosts = $em->getRepository('AppBundle:BlogPost')->findAll();
+        $total = $query->getSingleScalarResult();
 
-        return $allPosts;
+        return $total;
     }
 
 
@@ -58,20 +71,19 @@ class BlogDao
      * @return string
      *
      */
-    function validateSlug($slug, $title)
+    function validateSlug($slug = null, $title = null)
     {
-
-        // validate method
+        // validate method parameters
         if (!$slug && !$title) {
             throw new \InvalidArgumentException("Method requires either a slug or title parameter");
         }
 
-        // if the user provided a slug, return this.
+        // if the invocation has provided a slug, return this.
         if ($slug) {
             return $slug;
         }
 
-        // validate title string to valid url style string
+        // convert title string to valid url style string
         $titleAsSlug = StringHelper::stringToUrl($title);
 
         return $titleAsSlug;

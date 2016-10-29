@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Form\BlogPostType;
+use AppBundle\Util\NavigationHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,22 +17,68 @@ class BlogController extends Controller
     /**
      * @Route("/blog/", name="blogIndex")
      */
-    public function blogIndexAction(Request $request)
+    public function blogIndexAction()
     {
 
         // get all blog posts
-        // todo - limit to 8 per page
-        $blogPosts = $this->get('blogs')->getAll();
+        $blogPosts = $this->get('blogs')->getPosts(4);
 
         // handle a null response - will occur if there
         // are no blog posts in the database
-        if ($blogPosts === null) {
+        if ($blogPosts === null || empty($blogPosts)) {
             return new RedirectResponse($this->generateUrl('index'));
         }
 
+        // get pagination information if neccessary
+        $postsCount = $this->get('blogs')->getNumberOfPosts();
+        $pagination = NavigationHelper::getPaginationData($postsCount, 1, 4);
+
         // render template
         return $this->render('blog/index.html.twig', array(
-            'posts' => $blogPosts
+            'posts' => $blogPosts,
+            'pagination' => $pagination
+        ));
+    }
+
+    /**
+     * @param int $pageNumber
+     * @return RedirectResponse|Response
+     * @Route("/blog/page/{pageNumber}", name="blogPage")
+     */
+    public function blogPageAction($pageNumber = 1)
+    {
+        // validation to start page indexing from 1 not 0
+        if ($pageNumber == 0 || empty($pageNumber)) {
+            return $this->redirectToRoute('blogPage', array('pageNumber' => '1'));
+        }
+
+        // define offset variable
+        $offset = 0;
+
+        // update the page offset if they are not on page 1
+        // minus 1 from page number
+        if ($pageNumber != 1) {
+            ($offset = ($pageNumber - 1) * 4);
+        }
+
+        // get all blog posts, including the offset
+        $blogPosts = $this->get('blogs')->getPosts(4, $offset);
+
+        // handle an empty result response - will occur if there
+        // are no blog posts in the database or if the page number
+        // requested is invalid
+        if (empty($blogPosts)) {
+            return new RedirectResponse($this->generateUrl('index'));
+        }
+
+        // get pagination information if neccessary
+        $postsCount = $this->get('blogs')->getNumberOfPosts();
+        $pagination = NavigationHelper::getPaginationData($postsCount, $pageNumber, 4);
+
+        // render template
+        return $this->render('blog/index.html.twig', array(
+            'posts' => $blogPosts,
+            'pagination' => $pagination
         ));
     }
 
@@ -73,6 +120,9 @@ class BlogController extends Controller
         return $this->render('blog/read.html.twig', array(
             'post' => $blogPost
         ));
+
+
+
     }
 
     /**

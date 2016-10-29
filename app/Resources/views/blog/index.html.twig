@@ -14,6 +14,23 @@
             {% endfor %}
 
         </div>
+
+        {% if pagination %}
+        <div class="row">
+            <ul class="pagination center-align">
+                <li class="orange {% if pagination.current == pagination.first %}waves-effect disabled{% endif %}"><a href="{{ path('blogPage', {'pageNumber': pagination.first }) }}"><i class="material-icons">chevron_left</i></a></li>
+
+                {% for item in pagination.items %}
+
+                    <li class="waves-effect orange {% if item.index == pagination.current %}active{% endif %}"><a href="{{ path('blogPage', {'pageNumber': item.index}) }}">{{ item.index }}</a></li>
+
+                {% endfor %}
+
+                <li class="orange {% if pagination.current == pagination.last %}waves-effect disabled{% endif %}"><a href="{{ path('blogPage', {'pageNumber': pagination.last }) }}"><i class="material-icons">chevron_right</i></a></li>
+            </ul>
+        </div>
+        {% endif %}
+
     </div>
 </div>
 

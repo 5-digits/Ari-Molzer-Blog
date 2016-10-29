@@ -21,4 +21,29 @@ class AdminController extends Controller
         return $this->render('admin/login.html.twig', array());
     }
 
+    /**
+     * @Route("/logout/", name="logout")
+     * @Route("/log-out/")
+     * @Route("/signout/")
+     * @Route("/sign-out/")
+     */
+    public function signOutAction()
+    {
+        // todo destroy session
+
+        // Take the user back to site index.
+        return $this->redirectToRoute('index');
+
+
+    }
+
+    /**
+     * @Route("/documentation/", name="documentation")
+     */
+    public function documentationAction()
+    {
+        // render template
+        return $this->render('admin/documentation.html.twig', array());
+    }
+
 }
