@@ -101,7 +101,7 @@ class APIController extends Controller
     }
 
     /**
-     * @Route("/api/v1/{object}/", name="dynamicApiById")
+     * @Route("/api/v1/{object}/", name="dynamicApiAll")
      */
     public function dynamicApiAllAction($object)
     {

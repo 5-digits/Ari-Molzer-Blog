@@ -17,9 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class BlogPost
 {
-
-    const API_PUBLIC = true;
-
+    
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id

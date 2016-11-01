@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Form\BlogPostType;
+use AppBundle\Util\DateHelper;
 use AppBundle\Util\NavigationHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -91,6 +92,9 @@ class BlogController extends Controller
         $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
         $blogPost = $repository->findOneBySlug($slug);
 
+        // Format date from datetime to readable
+        $blogCreatedDate = DateHelper::formatDateDifference($blogPost->getCreated());
+
         // handle invalid slug
         if ($blogPost === null) {
             return new RedirectResponse($this->generateUrl('index'));
@@ -98,7 +102,8 @@ class BlogController extends Controller
 
         // render template
         return $this->render('blog/read.html.twig', array(
-            'post' => $blogPost
+            'post' => $blogPost,
+            'dateCreated' => $blogCreatedDate
         ));
     }
 

@@ -3,6 +3,8 @@
 {% block title %}Blog Browser | Ari Molzer{% endblock %}
 {% block body %}
 
+{{ include(':shared/components:search.html.twig') }}
+
 <div class="container content-container">
     <div class="section">
         <div class="row">
@@ -18,15 +20,15 @@
         {% if pagination %}
         <div class="row">
             <ul class="pagination center-align">
-                <li class="orange {% if pagination.current == pagination.first %}waves-effect disabled{% endif %}"><a href="{{ path('blogPage', {'pageNumber': pagination.first }) }}"><i class="material-icons">chevron_left</i></a></li>
+                <li class="orange {% if pagination.current == pagination.first %}waves-effect disabled lighten-1{% endif %}"><a class="white-text" href="{{ path('blogPage', {'pageNumber': pagination.first }) }}"><i class="material-icons">chevron_left</i></a></li>
 
                 {% for item in pagination.items %}
 
-                    <li class="waves-effect orange {% if item.index == pagination.current %}active{% endif %}"><a href="{{ path('blogPage', {'pageNumber': item.index}) }}">{{ item.index }}</a></li>
+                    <li class="waves-effect orange {% if item.index == pagination.current %}active darken-2{% endif %}"><a class="white-text" href="{{ path('blogPage', {'pageNumber': item.index}) }}">{{ item.index }}</a></li>
 
                 {% endfor %}
 
-                <li class="orange {% if pagination.current == pagination.last %}waves-effect disabled{% endif %}"><a href="{{ path('blogPage', {'pageNumber': pagination.last }) }}"><i class="material-icons">chevron_right</i></a></li>
+                <li class="orange {% if pagination.current == pagination.last %}waves-effect disabled lighten-1{% endif %}"><a class="white-text" href="{{ path('blogPage', {'pageNumber': pagination.last }) }}"><i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
         {% endif %}

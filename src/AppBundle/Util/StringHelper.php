@@ -11,7 +11,6 @@ namespace AppBundle\Util;
 class StringHelper
 {
     /**
-     *
      * converts 'blog title's of the day'
      * into 'blog-titles-of-the-day'
      *
