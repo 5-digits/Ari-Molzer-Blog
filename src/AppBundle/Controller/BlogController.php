@@ -5,12 +5,18 @@ namespace AppBundle\Controller;
 use AppBundle\Form\BlogPostType;
 use AppBundle\Util\DateHelper;
 use AppBundle\Util\NavigationHelper;
+use AppBundle\Entity\BlogPost;
+use AppBundle\Util\StringHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use AppBundle\Entity\BlogPost;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\Date;
 
 class BlogController extends Controller
 {
@@ -125,9 +131,6 @@ class BlogController extends Controller
         return $this->render('blog/read.html.twig', array(
             'post' => $blogPost
         ));
-
-
-
     }
 
     /**
@@ -135,43 +138,76 @@ class BlogController extends Controller
      * @Route("/blog/add")
      * @Route("/blog/create")
      */
-    public function newBlogAction(Request $request)
+    public function createBlogAction(Request $request)
     {
 
-        // todo add account validation
+        // todo - add user validation
 
-        // 1) build the form
-        $newBlog = new BlogPost();
-        $form = $this->createForm(BlogPostType::class, $newBlog);
+        $newPost = new BlogPost();
 
-        // 2) handle the submit (will only happen on POST)
+        $form = $this->createFormBuilder($newPost)
+            ->add('title', TextType::class, array(
+                'attr' => array('class' => 'tinymce')
+            ))
+            ->add('subtitle', TextType::class)
+            ->add('shortDescription', TextType::class)
+            ->add('slug', TextType::class, array(
+                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'another-wonderful-sunny-day'
+            )))
+            ->add('body', TextareaType::class, array(
+                'attr'=> array(
+                    'class' => 'materialize-textarea',
+                    'placeholder' => 'Upload a post hero image'
+                )
+            ))
+            ->add('headerImage', FileType::class, array('label' => 'Header Image'))
+
+            ->add('submit', SubmitType::class, array(
+                'label' => 'Save',
+                'attr' => array(
+                    'class' => 'btn waves-effect waves-light'
+                )
+            ))
+            ->getForm();
+
+        // Handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // 3) Encode the password (you could also do this via Doctrine listener)
+            // Assign the form data to a variable for ease
+            $newPost = $form->getData();
 
-            $newBlog->setTitle($form->get('title'));
-            $newBlog->setSubtitle($form->get('subtitle'));
+            // Set the blog object properties
+            // todo - update entity created and modified fields
+            $newPost->setCreated(new \DateTime(date("Y-m-d H:i:s")));
+            $newPost->setModified(new \DateTime(date("Y-m-d H:i:s")));
 
-            // validate the slug in the data access object
-            $slug = $this->get('blogs')->validateSlug($form->get('slug'), $form->get('title'));
-            $newBlog->setSlug($slug);
+            // URLify the slug provided or URLify the title
+            // if no custom slug was provided
+            if ($newPost->getSlug()) {
+                $newPost->setSlug(StringHelper::stringToUrl($newPost->getSlug()));
+            } else {
+                $newPost->setSlug(StringHelper::stringToUrl($newPost->getTitle()));
+            }
 
-            $newBlog->setBody($form->get('body'));
+            // Upload the image to the 'web/uploads/posts' folder
 
-            // 4) save the post!
+            // Persist and save the post to the database
             $em = $this->getDoctrine()->getManager();
-            $em->persist($newBlog);
+            $em->persist($newPost);
             $em->flush();
 
-            // redirect them somewhere
-            return $this->redirectToRoute('blogNew');
+            // Redirect to the newly created post
+            return $this->redirectToRoute('blogPost', array('slug' => $newPost->getSlug()));
         }
 
-        return $this->render(
-            'blog/create.html.twig',
-            array('form' => $form->createView())
-        );
+        // Handle a page request and render the template
+        // with the new post form
+        return $this->render('blog/create.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 
 }

@@ -15,20 +15,18 @@
 
                             <blockquote>
                                 <p>This documentation outlines the available API endpoints that are accessible.</p>
+                                <br />
                                 <p>All responses will be provided in JSON format.</p>
                             </blockquote>
 
                             <div class="row">
-
                                 <ul id="api-menu" class="collapsible" data-collapsible="expandable">
                                     <li>
-                                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>Blog Posts</div>
+                                        <div class="collapsible-header"><i class="material-icons">insert_drive_file</i>Blog Posts</div>
                                         <div class="collapsible-body">
-
                                             <p>
                                                 {{ exampleUrl }}/api/v1/BlogPost/{id}
                                             </p>
-
                                             <p>
                                                 <a href="{{ url('dynamicApiById', { 'object' : 'BlogPost', 'id' : 1 }) }}" target="_blank">
                                                     <span class="orange-text">Working example:</span> {{ url('dynamicApiById', { 'object' : 'BlogPost', 'id' : 1 }) }}
@@ -38,16 +36,19 @@
                                     </li>
                                     <li>
                                         <div class="collapsible-header"><i class="material-icons">search</i>Search Bar</div>
-                                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-                                    </li>
-                                    <li>
-                                        <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-                                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                                        <div class="collapsible-body">
+                                            <p>
+                                                {{ exampleUrl }}/search/posts/by/term/{searchTerm}
+                                            </p>
+                                            <p>
+                                                <a href="{{ url('searchTerm', { 'searchTerm' : 'the' }) }}" target="_blank">
+                                                    <span class="orange-text">Working example:</span> {{ url('searchTerm', { 'searchTerm' : 'hello' }) }}
+                                                </a>
+                                            </p>
+                                        </div>
                                     </li>
                                 </ul>
-
                             </div>
-
                         </div>
                     </div>
                 </div>

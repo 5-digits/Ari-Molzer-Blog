@@ -15,9 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="blog_posts")
  */
-class BlogPost
-{
-    
+class BlogPost {
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -41,7 +40,10 @@ class BlogPost
     private $slug;
 
     /**
-     * @ORM\Column(name="header_image", type="string", length=100)
+     * @ORM\Column(name="header_image", type="string", length=100, nullable=true)
+     *
+     * @Assert\NotBlank(message="Please, upload a header image for your post.")
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/png" })
      */
     private $headerImage;
 
@@ -58,22 +60,22 @@ class BlogPost
     /**
      * @ORM\Column(name="author", type="integer")
      */
-    private $author;
+    private $author = 1;
 
     /**
      * @ORM\Column(name="published", type="boolean", options={"default" : 0})
      */
-    private $published;
+    private $published = 0;
 
     /**
      * @ORM\Column(name="date_created", type="datetime", length=100)
      */
-    private $created;
+    private $created = '1970-01-01 00:00:00';
 
     /**
      * @ORM\Column(name="date_modified", type="datetime", length=100)
      */
-    private $modified;
+    private $modified = '1970-01-01 00:00:00';
 
     /**
      * @return mixed

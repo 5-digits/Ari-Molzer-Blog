@@ -1,15 +1,32 @@
 <div class="container">
-    <nav>
-        <div class="nav-wrapper blue-grey darken-3">
-            <form onsubmit="javascript:preventDefault();">
-                <div class="input-field">
-                    <input id="search" type="search" required autocomplete="off" >
-                    <label for="search"><i class="material-icons">search</i></label>
-                    <i id="search-close" class="material-icons">close</i>
+
+    <div class="row">
+
+        <div id="nav-menu" class="col s3 m2 l1 center-align">
+            <nav>
+                <div class="nav-wrapper blue-grey darken-3">
+                    <a href="#" data-activates="slide-out" class="nav-button-collapse">
+                        <i class="material-icons">menu</i>
+                    </a>
                 </div>
-            </form>
+            </nav>
         </div>
-    </nav>
+
+        <div id="nav-search" class="col s9 m10 l11">
+            <nav>
+                <div class="nav-wrapper blue-grey darken-3">
+                    <form onsubmit="javascript:preventDefault();">
+                        <div class="input-field">
+                            <input id="search" type="search" required autocomplete="off" >
+                            <label for="search"><i class="material-icons">search</i></label>
+                            <i id="search-close" class="material-icons">close</i>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+        </div>
+    </div>
+
 
     <ul class="collection" hidden id="search-results"></ul>
 </div>
@@ -34,6 +51,9 @@
         var $searchInput = $('#search');
         var $searchClose = $('#search-close');
         var $searchResults = $('#search-results');
+        var $searchContainer = $('#nav-search');
+        
+        var $navMenu = $('#nav-menu');
 
         // On keyup, start the countdown
         $searchInput.on('keyup', function () {
@@ -63,7 +83,6 @@
         // User is finished typing, search for results relating to their request
         function requestSearchResults() {
 
-            // Todo - update the url dynamically based off the action name
             // Search for posts relating to the search term
             $.getJSON( "{{ url('searchTermEndpoint') }}/" + $searchInput.val() , function( data ) {
 
@@ -96,6 +115,9 @@
                 });
             });
         }
+
+        $(".nav-button-collapse").sideNav();
+
     </script>
 
 {% endblock %}

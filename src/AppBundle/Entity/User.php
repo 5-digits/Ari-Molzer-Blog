@@ -19,6 +19,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User
 {
 
+    // Define user permission levels and their usages
+    // See the manage permission page for details - todo - make manage permission page
+    const PERMISSION_LEVEL_OWNER = 400;
+    const PERMISSION_LEVEL_ADMIN = 300;
+    const PERMISSION_LEVEL_USER = 200;
+    const PERMISSION_LEVEL_STEALTH_BANNED = 100;
+    const PERMISSION_LEVEL_BANNED = 000;
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -43,8 +51,8 @@ class User
     private $email;
 
     /**
-     * @ORM\Column(name="priviledge", type="string", length=20)
+     * @ORM\Column(name="privilege", type="string", length=20)
      */
-    private $priviledge;
+    private $privilege = self::PERMISSION_LEVEL_USER;
 
 }

@@ -7,6 +7,11 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
         {# todo - add metadata, seo and title from a site-settings entity to be customisable #}
+        {% block seo %}
+
+
+
+        {% endblock %}
 
         {# Add to homescreen for Chrome on Android #}
         <meta name="mobile-web-app-capable" content="yes">
@@ -45,6 +50,9 @@
 
     </head>
     <body>
+
+        {{ include(':shared/components:side-navigation.html.twig') }}
+
         {% block body %}{% endblock %}
 
         <!-- Include required JS scripts and JS block -->

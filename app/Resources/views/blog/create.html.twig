@@ -12,43 +12,58 @@
                         <h3>New Blog Post</h3>
 
                         <div class="row">
-                            <form class="col l12">
-                                <div class="row">
-                                    <div class="input-field col s12 m6">
-                                        <input placeholder="A beautiful summer day" name="post_title" id="post_title" type="text" class="validate" required>
-                                        <label for="first_name">Title</label>
-                                    </div>
-                                    <div class="input-field col s12 m6">
-                                        <input placeholder="My day at the beach with friends" name="post_subtitle" id="post_subtitle" type="text" class="validate" required>
-                                        <label for="first_name">Subtitle</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-field col s12 m6">
-                                        <input placeholder="a-beautiful-summer-day" name="post_subtitle" id="post_subtitle" type="text" class="validate">
-                                        <label for="first_name">Page Slug (Optional)</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="input-field col s12">
-                                        <textarea id="post_body" name="post_body" class="materialize-textarea"></textarea>
-                                        <label for="post_body">Post Content</label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="file-field input-field col s12">
-                                        <div class="btn">
-                                            <span>File</span>
-                                            <input type="file">
-                                        </div>
-                                        <div class="file-path-wrapper">
-                                            <input class="file-path validate" type="text" placeholder="Upload a post hero image">
-                                        </div>
-                                    </div>
+                            {#<form class="col l12">#}
+                                {#<div class="row">#}
+                                    {#<div class="input-field col s12 m6">#}
+                                        {#<input placeholder="A beautiful summer day" name="post_title" id="post_title" type="text" class="validate" required>#}
+                                        {#<label for="first_name">Title</label>#}
+                                    {#</div>#}
+                                    {#<div class="input-field col s12 m6">#}
+                                        {#<input placeholder="My day at the beach with friends" name="post_subtitle" id="post_subtitle" type="text" class="validate" required>#}
+                                        {#<label for="first_name">Subtitle</label>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="row">#}
+                                    {#<div class="input-field col s12 m6">#}
+                                        {#<input placeholder="a-beautiful-summer-day" name="post_subtitle" id="post_subtitle" type="text" class="validate">#}
+                                        {#<label for="first_name">Page Slug (Optional)</label>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="row">#}
+                                    {#<div class="input-field col s12">#}
+                                        {#<textarea id="post_body" name="post_body" class="materialize-textarea"></textarea>#}
+                                        {#<label for="post_body">Post Content</label>#}
+                                    {#</div>#}
+                                {#</div>#}
+                                {#<div class="row">#}
+                                    {#<div class="file-field input-field col s12">#}
+                                        {#<div class="btn">#}
+                                            {#<span>File</span>#}
+                                            {#<input type="file">#}
+                                        {#</div>#}
+                                        {#<div class="file-path-wrapper">#}
+                                            {#<input class="file-path validate" type="text" placeholder="Upload a post hero image">#}
+                                        {#</div>#}
+                                    {#</div>#}
 
+                                {#</div>#}
+                            {#</form>#}
+
+                            <div class="col l12">
+                                {{ form_start(form) }}
+                                {{ form_widget(form) }}
+
+                                <div class="file-field input-field">
+                                    {{ form_widget(form.headerImage) }}
                                 </div>
-                            </form>
+
+                                {{ form_end(form) }}
+                            </div>
+
                         </div>
+
+
+
 
                     </div>
                 </div>

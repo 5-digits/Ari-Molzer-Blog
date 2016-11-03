@@ -1,7 +1,7 @@
 <style>
 
     .card-image-{{ post.headerImage | slice(-0, -4) }} {
-        background-image: url('{{ asset('assets/images/posts/') }}{{ post.headerImage }}');
+        background-image: url('{{ asset('uploads/posts') }}{{ post.headerImage }}');
     }
 
 </style>
@@ -10,12 +10,15 @@
     <div class="col l12">
         <div class="card">
             <div class="card-image card-image-large card-image-{{ post.headerImage | slice(-0, -4) }}">
-                <span class="card-title">{{ post.title }}</span>
+                <span class="card-title">
+                    <h1>{{ post.title }}</h1>
+                    <h3>{{ post.subtitle }}</h3>
+                </span>
             </div>
             <div class="card-content">
                 <p>{{ post.shortDescription }}</p>
             </div>
-            <div class="card-action right-align">
+            <div class="card-action left-align">
 
                 <a href="{{ path('blogIndex') }}">
                     <button class="btn waves-effect waves-light orange accent-2">View More
@@ -28,13 +31,6 @@
                         <i class="material-icons right">send</i>
                     </button>
                 </a>
-
-                <a href="javascript:$('#sign-in-modal').openModal();" class="modal-trigger">
-                    <button class="btn waves-effect waves-light modal-trigger orange accent-2">Sign In
-                        <i class="material-icons right">lock_outline</i>
-                    </button>
-                </a>
-
             </div>
         </div>
     </div>
