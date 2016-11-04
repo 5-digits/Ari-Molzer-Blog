@@ -11,3 +11,7 @@ services:
     blogs:
         class: AppBundle\Dao\BlogDao
         arguments: ["@doctrine"]
+
+    app.post_image_uploader:
+            class: AppBundle\Service\FileUploader
+            arguments: ['%posts_directory%']

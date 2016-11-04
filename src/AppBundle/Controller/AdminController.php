@@ -38,12 +38,27 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/documentation/", name="documentation")
+     * @Route("/admin/", name="adminIndex")
+     */
+    public function adminIndexAction()
+    {
+        // todo check permissions
+
+        // render template
+        return $this->render('admin/index.html.twig', array());
+    }
+
+    /**
+     * @Route("/admin/documentation/", name="documentation")
      */
     public function documentationAction()
     {
         // render template
         return $this->render('admin/documentation.html.twig', array());
     }
+
+
+
+
 
 }

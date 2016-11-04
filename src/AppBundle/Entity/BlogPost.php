@@ -60,7 +60,12 @@ class BlogPost {
     /**
      * @ORM\Column(name="author", type="integer")
      */
-    private $author = 1;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="blogPost")
+     * @ORM\JoinColumn(name="author", referencedColumnName="id")
+     */
+    private $author;
 
     /**
      * @ORM\Column(name="published", type="boolean", options={"default" : 0})
@@ -68,12 +73,12 @@ class BlogPost {
     private $published = 0;
 
     /**
-     * @ORM\Column(name="date_created", type="datetime", length=100)
+     * @ORM\Column(name="date_created", type="datetime")
      */
     private $created = '1970-01-01 00:00:00';
 
     /**
-     * @ORM\Column(name="date_modified", type="datetime", length=100)
+     * @ORM\Column(name="date_modified", type="datetime")
      */
     private $modified = '1970-01-01 00:00:00';
 

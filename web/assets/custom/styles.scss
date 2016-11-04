@@ -92,6 +92,15 @@ html {
   }
 }
 
+.collection {
+  .collection-item {
+    .switch {
+      display: inline-block;
+      float: right;
+    }
+  }
+}
+
 .container {
 
   &.content-container {

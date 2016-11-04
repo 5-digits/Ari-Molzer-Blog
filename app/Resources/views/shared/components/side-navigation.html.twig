@@ -2,7 +2,7 @@
     <li>
         <div class="userView">
             <div class="background">
-                <img src="{{ asset('assets/images/posts/grow.jpg') }}">
+                <img src="{{ asset('uploads/theme/grow.jpg') }}">
             </div>
             <a href="#!user"><img class="circle" src="{{ asset('assets/images/users/1.jpg') }}"></a>
             <a href="#!name"><span class="white-text name">Ari Molzer</span></a>
@@ -16,6 +16,6 @@
     <li><div class="divider"></div></li>
 
     <li><a href="#!"><i class="material-icons">account_box</i>My Profile</a></li>
-    <li><a href="#!"><i class="material-icons">settings</i>Settings</a></li>
+    <li><a href="{{ url('adminIndex') }}"><i class="material-icons">settings</i>Settings</a></li>
     <li><a href="#!"><i class="material-icons">info</i>Information</a></li>
 </ul>

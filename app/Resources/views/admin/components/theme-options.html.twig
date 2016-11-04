@@ -1,0 +1,70 @@
+<div class="row">
+    <h5>Colors</h5>
+    <p>Select colors from the official Google Material design scheme <a href="https://material.google.com/style/color.html" target="_blank" class="orange-text">found here</a>.</p>
+
+    <div class="input-field col s12">
+        <select>
+            <option value="" disabled selected>Choose your option</option>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+        </select>
+        <label>Primary Color</label>
+    </div>
+
+    <div class="input-field col s12">
+        <select>
+            <option value="" disabled selected>Choose your option</option>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+        </select>
+        <label>Secondary Color</label>
+    </div>
+</div>
+
+<div class="row">
+    <h5>Background Image</h5>
+    <p>Upload the image you would like to be your sites full-size background.</p>
+    <p>Make sure you compress this image before uploading (Recommended size: < 500kb and 1920 x 1080).</p>
+
+    <form action="#">
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>File</span>
+                <input type="file">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload your background image">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <h5>Social Share Image</h5>
+    <p>Also known as an og-image - this image will be rendered when the site is shared on social media.</p>
+    <p>Make sure you compress this image before uploading (Required size: < 8MB and 1200 x 630).</p>
+
+    <form action="#">
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>File</span>
+                <input type="file">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload your og-image">
+            </div>
+        </div>
+    </form>
+</div>
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function() {
+            $('select').material_select();
+        });
+    </script>
+
+{% endblock %}

@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class BlogController extends Controller
 {
@@ -192,7 +193,35 @@ class BlogController extends Controller
                 $newPost->setSlug(StringHelper::stringToUrl($newPost->getTitle()));
             }
 
-            // Upload the image to the 'web/uploads/posts' folder
+            // Upload the image to the 'web/uploads/posts' directory
+            $file = $newPost->getHeaderImage();
+
+            // Make sure no two images have the same ID and loop through until
+            // the name generated is unique.
+            $existingImageExists = true;
+            while ($existingImageExists) {
+
+                // Create a name for our new file
+                // Make it super unlikely to generate something not unique
+                $newFileName = md5(uniqid('bpimage_', true)) . rand(10,100) . '.' . $file->guessExtension();
+
+                // Search for an existing image with the name name
+                $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
+                $existingBlogPost = $repository->findOneByHeaderImage($newFileName);
+
+                // Check if the new file name is already in use
+                if (!$existingBlogPost) {
+                    continue;
+                }
+
+                $existingImageExists = false;
+            }
+
+            // Upload this file into our selected uploads directory
+            $file->move(
+                $this->getParameter('posts_directory'),
+                $newFileName
+            );
 
             // Persist and save the post to the database
             $em = $this->getDoctrine()->getManager();
