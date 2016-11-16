@@ -15,12 +15,16 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-
+        // Get the data to be shown on the landing page
         $indexData = $this->loadIndexData();
+
+        // Get the current signed-in user
+        $user = $this->get('session')->get('user');
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', array(
-            'indexData' => $indexData,
+            'user' => $user,
+            'indexData' => $indexData
         ));
     }
 

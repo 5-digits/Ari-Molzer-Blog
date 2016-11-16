@@ -20,7 +20,7 @@ class APIController extends Controller
      */
     public function postApiByIdAction($id)
     {
-        // check that id has been passed and hasn't got
+        // check that id has been passed and hasn't got alphabetic chars
         if (!$id || !is_numeric($id)) {
             $this->createNotFoundException("No ID provided");
             return new Response(
@@ -140,6 +140,42 @@ class APIController extends Controller
         $jsonContent = $serializer->serialize($object, 'json');
 
         return new Response($jsonContent);
+    }
+
+    /**
+     * @Route("/api/v1/like/post/{id}/", name="likePostApi")
+     * @Route("/api/v1/like/post/", name="likePostApiRoute")
+     */
+    public function likeBlogPostByIdAction($id) {
+
+        // check that id has been passed and hasn't got alphabetic chars
+        if (!$id || !is_numeric($id)) {
+            $this->createNotFoundException("No ID provided");
+            return new Response(
+                'Invalid Request - Please request a valid post ID',
+                Response::HTTP_BAD_REQUEST,
+                array('content-type' => 'application/json')
+            );
+        }
+
+        // Get blog repository and the requested post
+        $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
+        $post = $repository->findOneById($id);
+
+        // Check if a valid post has been retrieved
+        if (!$post) {
+            $this->createNotFoundException("No post found");
+            return new Response("No post found");
+        }
+
+        // Create new like record - update post likes cache
+
+        return New Response(
+            "You have successfully liked this post",
+            Response::HTTP_OK
+        );
+
+
     }
 
 }

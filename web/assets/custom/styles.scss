@@ -101,16 +101,19 @@ html {
   }
 }
 
-.container {
-
-  &.content-container {
-    padding: 50px 0;
-  }
-
-}
-
 nav {
   .nav-wrapper {
     margin-top: 20px;
+  }
+}
+
+.side-nav {
+  .side-nav-header {
+    height: 176px;
+  }
+  .userView {
+    &.userViewNoSession {
+      padding: 100px 32px 0;
+    }
   }
 }

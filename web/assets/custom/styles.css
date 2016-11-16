@@ -59,10 +59,12 @@ html {
   display: inline-block;
   float: right; }
 
-.container.content-container {
-  padding: 50px 0; }
-
 nav .nav-wrapper {
   margin-top: 20px; }
+
+.side-nav .side-nav-header {
+  height: 176px; }
+.side-nav .userView.userViewNoSession {
+  padding: 100px 32px 0; }
 
 /*# sourceMappingURL=styles.css.map */

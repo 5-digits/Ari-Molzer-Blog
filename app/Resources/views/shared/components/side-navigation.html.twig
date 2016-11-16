@@ -1,21 +1,45 @@
 <ul id="slide-out" class="side-nav">
-    <li>
-        <div class="userView">
-            <div class="background">
-                <img src="{{ asset('uploads/theme/grow.jpg') }}">
+
+    {% if user %}
+        <li class="side-nav-header">
+            <div class="userView">
+                <div class="background">
+                    <img src="{{ asset('uploads/theme/grow.jpg') }}">
+                </div>
+                <a href="#!user"><img class="circle" src="{{ asset('assets/images/users/1.jpg') }}"></a>
+                <a href="#!name"><span class="white-text name">{{ user.firstname }} {{ user.surname }}</span></a>
+                <a href="#!email"><span class="white-text email">{{ user.email }}</span></a>
             </div>
-            <a href="#!user"><img class="circle" src="{{ asset('assets/images/users/1.jpg') }}"></a>
-            <a href="#!name"><span class="white-text name">Ari Molzer</span></a>
-            <a href="#!email"><span class="white-text email">ari.molzer@molzertech.com</span></a>
-        </div>
-    </li>
+        </li>
+    {% else %}
+        <li class="side-nav-header">
+            <div class="userView userViewNoSession">
+                <div class="background">
+                    <img src="{{ asset('uploads/theme/grow.jpg') }}">
+                </div>
+                <a class="btn waves-effect waves-light orange accent-2" href="{{ url('login') }}">Sign In</a>
+            </div>
+        </li>
+    {% endif %}
 
     <li><a href="{{ url('index') }}"><i class="material-icons">home</i>Home</a></li>
-    <li><a href="{{ url('blogIndex') }}"><i class="material-icons">insert_drive_file</i>Blog Posts</a></li>
+    <li><a href="{{ url('blogIndex') }}"><i class="material-icons">insert_drive_file</i>Posts</a></li>
+
+    {% if user %}
+        <li><a href="{{ url('blogNew') }}"><i class="material-icons">create</i>New Post</a></li>
+    {% endif %}
 
     <li><div class="divider"></div></li>
 
-    <li><a href="#!"><i class="material-icons">account_box</i>My Profile</a></li>
-    <li><a href="{{ url('adminIndex') }}"><i class="material-icons">settings</i>Settings</a></li>
+    {% if user %}
+        <li><a href="#!"><i class="material-icons">account_box</i>My Profile</a></li>
+        <li><a href="{{ url('adminIndex') }}"><i class="material-icons">settings</i>Settings</a></li>
+    {% endif %}
+
     <li><a href="#!"><i class="material-icons">info</i>Information</a></li>
+
+    {% if user %}
+        <li><div class="divider"></div></li>
+        <li><a href="{{ url('logout') }}">Sign Out</a></li>
+    {% endif %}
 </ul>

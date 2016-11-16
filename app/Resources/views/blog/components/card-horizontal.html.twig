@@ -1,6 +1,6 @@
 <style>
 
-    .card-image-{{ post.headerImage | slice(-0, -4) }} {
+    .card-image-{{ post.slug }} {
         background-image: url('{{ asset('uploads/posts/') }}{{ post.headerImage }}');
     }
 
@@ -9,7 +9,7 @@
 
 <div class="col l12">
     <div class="card horizontal">
-        <div class="card-image card-image-{{ post.headerImage | slice(-0, -4) }}"></div>
+        <div class="card-image card-image-{{ post.slug }}"></div>
         <div class="card-stacked">
             <div class="card-content">
                 <h5>{{ post.title }}</h5>

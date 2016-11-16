@@ -2,10 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\BlogPostType;
 use AppBundle\Util\DateHelper;
 use AppBundle\Util\NavigationHelper;
 use AppBundle\Entity\BlogPost;
+use AppBundle\Entity\User;
+use AppBundle\Form\BlogPostType;
 use AppBundle\Util\StringHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -27,9 +28,12 @@ class BlogController extends Controller
      */
     public function blogIndexAction()
     {
+        // Get the current signed-in user
+        $user = $this->get('session')->get('user');
 
         // get all blog posts
-        $blogPosts = $this->get('blogs')->getPosts(4);
+        $postsPerPage = 3;
+        $blogPosts = $this->get('blogs')->getPosts($postsPerPage);
 
         // handle a null response - will occur if there
         // are no blog posts in the database
@@ -39,10 +43,11 @@ class BlogController extends Controller
 
         // get pagination information if neccessary
         $postsCount = $this->get('blogs')->getNumberOfPosts();
-        $pagination = NavigationHelper::getPaginationData($postsCount, 1, 4);
+        $pagination = NavigationHelper::getPaginationData($postsCount, 1, $postsPerPage);
 
         // render template
         return $this->render('blog/index.html.twig', array(
+            'user' => $user,
             'posts' => $blogPosts,
             'pagination' => $pagination
         ));
@@ -51,16 +56,16 @@ class BlogController extends Controller
     /**
      * @param int $pageNumber
      * @return RedirectResponse|Response
-     * @Route("/blog/page/{pageNumber}", name="blogPage")
+     * @Route("/blog/page/{pageNumber}", name="blogPage", defaults={"pageNumber" = 1})
      */
-    public function blogPageAction($pageNumber = 1)
+    public function blogPageAction($pageNumber)
     {
         // validation to start page indexing from 1 not 0
         if ($pageNumber == 0 || empty($pageNumber)) {
             return $this->redirectToRoute('blogPage', array('pageNumber' => '1'));
         }
 
-        // define offset variable
+        // instantiate offset variable
         $offset = 0;
 
         // update the page offset if they are not on page 1
@@ -70,7 +75,7 @@ class BlogController extends Controller
         }
 
         // get all blog posts, including the offset
-        $blogPosts = $this->get('blogs')->getPosts(4, $offset);
+        $blogPosts = $this->get('blogs')->getPosts(3, $offset);
 
         // handle an empty result response - will occur if there
         // are no blog posts in the database or if the page number
@@ -83,8 +88,12 @@ class BlogController extends Controller
         $postsCount = $this->get('blogs')->getNumberOfPosts();
         $pagination = NavigationHelper::getPaginationData($postsCount, $pageNumber, 4);
 
+        // Get the current signed-in user
+        $user = $this->get('session')->get('user');
+
         // render template
         return $this->render('blog/index.html.twig', array(
+            'user' => $user,
             'posts' => $blogPosts,
             'pagination' => $pagination
         ));
@@ -95,9 +104,22 @@ class BlogController extends Controller
      */
     public function viewBlogPostAction($slug)
     {
+
+        // Get the current signed-in user
+        $user = $this->get('session')->get('user');
+
         // query for a single product by its primary key (usually "id")
         $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
         $blogPost = $repository->findOneBySlug($slug);
+
+        // Check if the post has been published for the public
+        // Return a response if it hasn't
+        if (!$blogPost->getPublished()) {
+            return New Response(
+                "This post is not publicly accessible at this time.",
+                Response::HTTP_FORBIDDEN
+            );
+        }
 
         // Format date from datetime to readable
         $blogCreatedDate = DateHelper::formatDateDifference($blogPost->getCreated());
@@ -109,6 +131,7 @@ class BlogController extends Controller
 
         // render template
         return $this->render('blog/read.html.twig', array(
+            'user' => $user,
             'post' => $blogPost,
             'dateCreated' => $blogCreatedDate
         ));
@@ -122,6 +145,15 @@ class BlogController extends Controller
         // query for a single product by its primary key (usually "id")
         $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
         $blogPost = $repository->findOneById($id);
+
+        // Check if the post has been published for the public
+        // Return a response if it hasn't
+        if (!$blogPost->getPublished()) {
+            return New Response(
+                "This post is not publicly accessible at this time.",
+                Response::HTTP_FORBIDDEN
+            );
+        }
 
         // handle invalid id
         if ($blogPost === null) {
@@ -142,36 +174,20 @@ class BlogController extends Controller
     public function createBlogAction(Request $request)
     {
 
-        // todo - add user validation
+        // Get the current signed-in user
+        $user = $this->get('session')->get('user');
 
+        // Check the user has privileges to access this route
+        if (!$user || $user->getPrivilege() < User::PERMISSION_LEVEL_ADMIN) {
+            return New Response(
+                'The signed-in user does not have permission to access this page',
+                Response::HTTP_FORBIDDEN
+            );
+        }
+
+        // Create a new blog post object and post form
         $newPost = new BlogPost();
-
-        $form = $this->createFormBuilder($newPost)
-            ->add('title', TextType::class, array(
-                'attr' => array('class' => 'tinymce')
-            ))
-            ->add('subtitle', TextType::class)
-            ->add('shortDescription', TextType::class)
-            ->add('slug', TextType::class, array(
-                'required' => false,
-                'attr' => array(
-                    'placeholder' => 'another-wonderful-sunny-day'
-            )))
-            ->add('body', TextareaType::class, array(
-                'attr'=> array(
-                    'class' => 'materialize-textarea',
-                    'placeholder' => 'Upload a post hero image'
-                )
-            ))
-            ->add('headerImage', FileType::class, array('label' => 'Header Image'))
-
-            ->add('submit', SubmitType::class, array(
-                'label' => 'Save',
-                'attr' => array(
-                    'class' => 'btn waves-effect waves-light'
-                )
-            ))
-            ->getForm();
+        $form = $form = $this->createForm(BlogPostType::class, $newPost);
 
         // Handle the submit (will only happen on POST)
         $form->handleRequest($request);
@@ -181,7 +197,6 @@ class BlogController extends Controller
             $newPost = $form->getData();
 
             // Set the blog object properties
-            // todo - update entity created and modified fields
             $newPost->setCreated(new \DateTime(date("Y-m-d H:i:s")));
             $newPost->setModified(new \DateTime(date("Y-m-d H:i:s")));
 
@@ -196,26 +211,10 @@ class BlogController extends Controller
             // Upload the image to the 'web/uploads/posts' directory
             $file = $newPost->getHeaderImage();
 
-            // Make sure no two images have the same ID and loop through until
-            // the name generated is unique.
-            $existingImageExists = true;
-            while ($existingImageExists) {
-
-                // Create a name for our new file
-                // Make it super unlikely to generate something not unique
-                $newFileName = md5(uniqid('bpimage_', true)) . rand(10,100) . '.' . $file->guessExtension();
-
-                // Search for an existing image with the name name
-                $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
-                $existingBlogPost = $repository->findOneByHeaderImage($newFileName);
-
-                // Check if the new file name is already in use
-                if (!$existingBlogPost) {
-                    continue;
-                }
-
-                $existingImageExists = false;
-            }
+            // Create a name for our new file
+            // Make it super unlikely to generate something not unique
+            $newFileName = md5(uniqid('bpimage_', true)) . rand(10,100) . '.' . $file->guessExtension();
+            $newPost->setHeaderImage($newFileName);
 
             // Upload this file into our selected uploads directory
             $file->move(
@@ -235,6 +234,7 @@ class BlogController extends Controller
         // Handle a page request and render the template
         // with the new post form
         return $this->render('blog/create.html.twig', array(
+            'user' => $user,
             'form' => $form->createView()
         ));
     }

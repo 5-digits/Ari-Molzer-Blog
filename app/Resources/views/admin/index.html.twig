@@ -3,7 +3,7 @@
 {% block title %}Admin Settings | Ari Molzer{% endblock %}
 {% block body %}
 
-    <div class="container content-container">
+    <div class="container">
         <div class="section">
 
                 <div class="card">
@@ -33,7 +33,9 @@
                     </div>
 
                     <div class="row" id="user_settings">
-
+                        <div class="col s8 offset-s2">
+                            {{ dump(user.firstname) }}
+                        </div>
                     </div>
 
                     <div class="row" id="api_settings">

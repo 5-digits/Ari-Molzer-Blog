@@ -33,43 +33,70 @@ class BlogDao
      * @param int $offset
      * @return BlogPost[]|null
      */
-    function getPosts($limit = 10, $offset = 0)
+    function getPosts($limit = 10, $offset = 0, $publishedOnly = true)
     {
         $em = $this->doctrine->getManager();
 
-        $blogPost = $em->getRepository('AppBundle:BlogPost')->findBy(
-            array(),
-            array('id' => 'DESC'),
-            $limit,
-            $offset
-        );
+        if ($publishedOnly) {
+            $blogPost = $em->getRepository('AppBundle:BlogPost')->findBy(
+                array('published' => true),
+                array('id' => 'DESC'),
+                $limit,
+                $offset
+            );
+        } else {
+            $blogPost = $em->getRepository('AppBundle:BlogPost')->findBy(
+                array(),
+                array('id' => 'DESC'),
+                $limit,
+                $offset
+            );
+        }
+
 
         return $blogPost;
     }
 
-    function getNumberOfPosts()
+    /**
+     * Count the number of posts in the database
+     * By default, only get published posts
+     *
+     * @param bool $publishedOnly
+     * @return int
+     */
+    function getNumberOfPosts($publishedOnly = true)
     {
-        $query = $this->doctrine->getManager()->createQueryBuilder()
-            ->select('COUNT(bp.id)')
-            ->from('AppBundle:BlogPost', 'bp')
-            ->where('bp.published = 1')
-            ->getQuery();
+        // Generate the query depending on method parameter
+        if (!$publishedOnly) {
 
-        $total = $query->getSingleScalarResult();
+            // Get the number of all blog posts in the database
+            $query = $this->doctrine->getManager()->createQueryBuilder()
+                ->select('COUNT(bp.id)')
+                ->from('AppBundle:BlogPost', 'bp')
+                ->getQuery();
 
-        return $total;
+        } else {
+
+            // Get only the posts that are public
+            $query = $this->doctrine->getManager()->createQueryBuilder()
+                ->select('COUNT(bp.id)')
+                ->from('AppBundle:BlogPost', 'bp')
+                ->where('bp.published = 1')
+                ->getQuery();
+        }
+
+        // Return query results
+        return $query->getSingleScalarResult();
     }
 
 
     /**
-     *
      * if the user provides a slug, return this value
      * else use sanitize the title as use this as the slug
      *
      * @param $slug
      * @param $title
      * @return string
-     *
      */
     function validateSlug($slug = null, $title = null)
     {

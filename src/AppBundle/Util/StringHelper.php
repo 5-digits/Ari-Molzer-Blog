@@ -31,4 +31,8 @@ class StringHelper
 
         return $string;
     }
+
+    function file_ext_strip($filename){
+        return preg_replace('/.[^.]*$/', '', $filename);
+    }
 }

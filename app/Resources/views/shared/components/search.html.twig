@@ -111,7 +111,7 @@
 
                 // Loop through the results and add them to the DOM
                 $.each(data, function( index, value ) {
-                    $('<a class="collection-item avatar orange-text" href="'+value['url']+'"><img src="/assets/images/posts/'+value['headerImage']+'" class="circle"><span class="title">'+value['title']+'</span><p>'+value['subtitle']+'</p></a>').prependTo($searchResults).slideDown();
+                    $('<a class="collection-item avatar orange-text" href="'+value['url']+'"><img src="/uploads/posts/'+value['headerImage']+'" class="circle"><span class="title">'+value['title']+'</span><p>'+value['subtitle']+'</p></a>').prependTo($searchResults).slideDown();
                 });
             });
         }

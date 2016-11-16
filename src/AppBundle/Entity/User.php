@@ -51,6 +51,11 @@ class User
     private $email;
 
     /**
+     * @ORM\Column(name="password", type="string", length=100, nullable=true)
+     */
+    private $password;
+
+    /**
      * @ORM\Column(name="privilege", type="string", length=20)
      */
     private $privilege = self::PERMISSION_LEVEL_USER;
@@ -133,6 +138,22 @@ class User
     public function setPrivilege($privilege)
     {
         $this->privilege = $privilege;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 
 }

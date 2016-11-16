@@ -40,7 +40,7 @@ class BlogPost {
     private $slug;
 
     /**
-     * @ORM\Column(name="header_image", type="string", length=100, nullable=true)
+     * @ORM\Column(name="header_image")
      *
      * @Assert\NotBlank(message="Please, upload a header image for your post.")
      * @Assert\File(mimeTypes={ "image/jpeg", "image/png" })
@@ -48,7 +48,7 @@ class BlogPost {
     private $headerImage;
 
     /**
-     * @ORM\Column(name="short_description", type="text")
+     * @ORM\Column(name="short_description", type="text", length=250)
      */
     private $shortDescription;
 
