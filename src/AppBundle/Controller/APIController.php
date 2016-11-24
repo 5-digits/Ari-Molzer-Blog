@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\BlogPost;
+use AppBundle\Entity\Post;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,7 +31,7 @@ class APIController extends Controller
         }
 
         // Get blog repository and the requested post
-        $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $post = $repository->findOneById($id);
 
         // Check if a valid post has been retrieved
@@ -159,7 +159,7 @@ class APIController extends Controller
         }
 
         // Get blog repository and the requested post
-        $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $post = $repository->findOneById($id);
 
         // Check if a valid post has been retrieved

@@ -21,11 +21,11 @@ class User
 
     // Define user permission levels and their usages
     // See the manage permission page for details - todo - make manage permission page
-    const PERMISSION_LEVEL_OWNER = 400;
-    const PERMISSION_LEVEL_ADMIN = 300;
-    const PERMISSION_LEVEL_USER = 200;
-    const PERMISSION_LEVEL_STEALTH_BANNED = 100;
-    const PERMISSION_LEVEL_BANNED = 000;
+    const ROLE_OWNER = "ROLE_OWNER";
+    const ROLE_ADMIN = "ROLE_ADMIN";
+    const ROLE_USER = "ROLE_USER";
+    const ROLE_STEALTH_BANNED = "ROLE_STEALTH_BANNED";
+    const ROLE_BANNED = "ROLE_BANNED";
 
     /**
      * @ORM\Column(name="id", type="integer")
@@ -45,7 +45,12 @@ class User
     private $surname;
 
     /**
-     * @ORM\Column(name="email", type="string", length=100, unique=true)
+     * @ORM\Column(name="username", type="string", length=100, nullable=true)
+     */
+    private $username;
+
+    /**
+     * @ORM\Column(name="email", type="string", unique=true)
      * @Assert\Email()
      */
     private $email;
@@ -58,7 +63,7 @@ class User
     /**
      * @ORM\Column(name="privilege", type="string", length=20)
      */
-    private $privilege = self::PERMISSION_LEVEL_USER;
+    private $privilege = self::ROLE_USER;
 
     /**
      * @return mixed
@@ -106,6 +111,22 @@ class User
     public function setSurname($surname)
     {
         $this->surname = $surname;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param mixed $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
     }
 
     /**
