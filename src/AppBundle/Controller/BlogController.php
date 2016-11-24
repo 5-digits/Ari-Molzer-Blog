@@ -4,21 +4,17 @@ namespace AppBundle\Controller;
 
 use AppBundle\Util\DateHelper;
 use AppBundle\Util\NavigationHelper;
-use AppBundle\Entity\BlogPost;
+use AppBundle\Entity\Post;
 use AppBundle\Entity\User;
 use AppBundle\Form\BlogPostType;
 use AppBundle\Util\StringHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use AppBundle\Service\ErrorMessage;
 
 class BlogController extends Controller
 {
@@ -109,7 +105,7 @@ class BlogController extends Controller
         $user = $this->get('session')->get('user');
 
         // query for a single product by its primary key (usually "id")
-        $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $blogPost = $repository->findOneBySlug($slug);
 
         // Check if the post has been published for the public
@@ -143,7 +139,7 @@ class BlogController extends Controller
     public function viewBlogPostIdAction($id)
     {
         // query for a single product by its primary key (usually "id")
-        $repository = $this->getDoctrine()->getRepository('AppBundle:BlogPost');
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
         $blogPost = $repository->findOneById($id);
 
         // Check if the post has been published for the public
@@ -178,7 +174,7 @@ class BlogController extends Controller
         $user = $this->get('session')->get('user');
 
         // Check the user has privileges to access this route
-        if (!$user || $user->getPrivilege() < User::PERMISSION_LEVEL_ADMIN) {
+        if (!$user || $user->getPrivilege() < User::ROLE_ADMIN) {
             return New Response(
                 'The signed-in user does not have permission to access this page',
                 Response::HTTP_FORBIDDEN
@@ -186,8 +182,8 @@ class BlogController extends Controller
         }
 
         // Create a new blog post object and post form
-        $newPost = new BlogPost();
-        $form = $form = $this->createForm(BlogPostType::class, $newPost);
+        $newPost = new Post();
+        $form = $this->createForm(BlogPostType::class, $newPost);
 
         // Handle the submit (will only happen on POST)
         $form->handleRequest($request);
@@ -236,6 +232,57 @@ class BlogController extends Controller
         return $this->render('blog/create.html.twig', array(
             'user' => $user,
             'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/blog/post/{slug}/update", name="blogPostUpdate")
+     */
+    public function updateBlogPostAction($slug)
+    {
+        // Get the current signed-in user
+        $user = $this->get('session')->get('user');
+
+        // Check the user is valid
+        if (!$user) {
+            $this->get('session')->getFlashBag()->add('warning', ErrorMessage::ERROR_NOT_SIGNED_IN);
+            return $this->redirectToRoute('index');
+        }
+
+        // Check the user has valid permissions
+        if ($user->getPrivilege() < User::PERMISSION_LEVEL_ADMIN) {
+            $this->get('session')->getFlashBag()->add('warning', ErrorMessage::ERROR_INSUFFICIENT_PERMISSION);
+            return $this->redirectToRoute('index');
+        }
+
+        // query for a single product by its primary key (usually "id")
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $blogPost = $repository->findOneBySlug($slug);
+
+        // Check if the post has been published for the public
+        // Return a response if it hasn't
+        if (!$blogPost->getPublished()) {
+
+            return New Response(
+                "This post is not publicly accessible at this time.",
+                Response::HTTP_FORBIDDEN
+            );
+
+        }
+
+        // Format date from datetime to readable
+        $blogCreatedDate = DateHelper::formatDateDifference($blogPost->getCreated());
+
+        // handle invalid slug
+        if ($blogPost === null) {
+            return new RedirectResponse($this->generateUrl('index'));
+        }
+
+        // render template
+        return $this->render('blog/read.html.twig', array(
+            'user' => $user,
+            'post' => $blogPost,
+            'dateCreated' => $blogCreatedDate
         ));
     }
 

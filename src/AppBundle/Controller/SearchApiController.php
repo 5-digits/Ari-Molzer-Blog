@@ -30,7 +30,7 @@ class SearchApiController extends Controller
         // where the search term relates to the title or main body
         // todo - add in keywords and remove body
         $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery("SELECT p.id, p.slug, p.title, p.subtitle, p.headerImage FROM AppBundle:BlogPost p WHERE p.title LIKE :searchTerm OR p.body LIKE :searchTerm")
+        $query = $em->createQuery("SELECT p.id, p.slug, p.title, p.subtitle, p.headerImage FROM AppBundle:Post p WHERE p.title LIKE :searchTerm OR p.body LIKE :searchTerm")
             ->setParameter('searchTerm', '%'.$searchTerm.'%')
             ->setMaxResults(5);
 

@@ -55,7 +55,13 @@
 
         {{ include(':shared/components:search.html.twig') }}
 
-        {% block body %}{% endblock %}
+        {{ include(':shared/components:flashbag.html.twig') }}
+
+
+
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
 
         <!-- Include required JS scripts and JS block -->
         {#{{ include('shared/includes/firebase.html.twig') }}#}

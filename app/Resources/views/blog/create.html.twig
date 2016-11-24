@@ -3,56 +3,54 @@
 {% block title %}New Post | Ari Molzer{% endblock %}
 {% block body %}
 
-    <div class="container">
-        <div class="section">
-            <div class="row">
-                <div class="card">
-                    <div class="card-content container">
+    <div class="section">
+        <div class="row">
+            <div class="card">
+                <div class="card-content container">
 
-                        <h3 class="center-align">New Blog Post</h3>
+                    <h3 class="center-align">New Blog Post</h3>
 
-                        <div class="row">
-                            <div class="col l12">
-                                {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col l12">
+                            {{ form_start(form) }}
 
-                                    <div class="row">
-                                        <div class="col s12 m6">
-                                            <label>Title</label>
-                                            {{ form_widget(form.title) }}
-                                        </div>
-                                        <div class="col s12 m6">
-                                            <label>Subtitle</label>
-                                            {{ form_widget(form.subtitle) }}
-
-                                        </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <label>Title</label>
+                                        {{ form_widget(form.title) }}
                                     </div>
+                                    <div class="col s12 m6">
+                                        <label>Subtitle</label>
+                                        {{ form_widget(form.subtitle) }}
 
-                                    <label>Slug</label>
-                                    {{ form_widget(form.slug) }}
-
-                                    <label>Short Description</label>
-                                    {{ form_widget(form.shortDescription) }}
-
-
-                                    <label>Article body</label>
-                                    {{ form_widget(form.body) }}
-
-                                    <div class="file-field input-field">
-                                        <a class="btn">
-                                            <span>File</span>
-                                            <input type="file">
-                                        </a>
-                                        <div class="file-path-wrapper">
-                                            {{ form_widget(form.headerImage) }}
-                                            <input class="file-path validate" type="text">
-                                        </div>
                                     </div>
+                                </div>
 
-                                    <div class="row right-align">
-                                        {{ form_widget(form.submit) }}
+                                <label>Slug</label>
+                                {{ form_widget(form.slug) }}
+
+                                <label>Short Description</label>
+                                {{ form_widget(form.shortDescription) }}
+
+
+                                <label>Article body</label>
+                                {{ form_widget(form.body) }}
+
+                                <div class="file-field input-field">
+                                    <a class="btn">
+                                        <span>File</span>
+                                        <input type="file">
+                                    </a>
+                                    <div class="file-path-wrapper">
+                                        {{ form_widget(form.headerImage) }}
+                                        <input class="file-path validate" type="text">
                                     </div>
-                                {{ form_end(form) }}
-                            </div>
+                                </div>
+
+                                <div class="row right-align">
+                                    {{ form_widget(form.submit) }}
+                                </div>
+                            {{ form_end(form) }}
                         </div>
                     </div>
                 </div>

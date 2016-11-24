@@ -8,7 +8,7 @@
 
 namespace AppBundle\Dao;
 
-use AppBundle\Entity\BlogPost;
+use AppBundle\Entity\Post;
 use AppBundle\Util\StringHelper;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
@@ -31,28 +31,28 @@ class BlogDao
     /**
      * @param int $limit
      * @param int $offset
-     * @return BlogPost[]|null
+     * @param bool $publishedOnly
+     * @return Post[]|null
      */
     function getPosts($limit = 10, $offset = 0, $publishedOnly = true)
     {
         $em = $this->doctrine->getManager();
 
         if ($publishedOnly) {
-            $blogPost = $em->getRepository('AppBundle:BlogPost')->findBy(
+            $blogPost = $em->getRepository('AppBundle:Post')->findBy(
                 array('published' => true),
                 array('id' => 'DESC'),
                 $limit,
                 $offset
             );
         } else {
-            $blogPost = $em->getRepository('AppBundle:BlogPost')->findBy(
+            $blogPost = $em->getRepository('AppBundle:Post')->findBy(
                 array(),
                 array('id' => 'DESC'),
                 $limit,
                 $offset
             );
         }
-
 
         return $blogPost;
     }
@@ -72,7 +72,7 @@ class BlogDao
             // Get the number of all blog posts in the database
             $query = $this->doctrine->getManager()->createQueryBuilder()
                 ->select('COUNT(bp.id)')
-                ->from('AppBundle:BlogPost', 'bp')
+                ->from('AppBundle:Post', 'bp')
                 ->getQuery();
 
         } else {
@@ -80,7 +80,7 @@ class BlogDao
             // Get only the posts that are public
             $query = $this->doctrine->getManager()->createQueryBuilder()
                 ->select('COUNT(bp.id)')
-                ->from('AppBundle:BlogPost', 'bp')
+                ->from('AppBundle:Post', 'bp')
                 ->where('bp.published = 1')
                 ->getQuery();
         }

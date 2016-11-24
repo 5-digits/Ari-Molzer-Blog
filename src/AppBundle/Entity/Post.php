@@ -13,9 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="blog_posts")
+ * @ORM\Table(name="post")
  */
-class BlogPost {
+class Post {
 
     /**
      * @ORM\Column(name="id", type="integer")
