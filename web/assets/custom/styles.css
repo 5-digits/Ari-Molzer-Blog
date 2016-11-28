@@ -2,24 +2,43 @@ a {
   color: inherit; }
   a:hover {
     text-decoration: none;
-    color: inherit; }
-
-blockquote {
-  border-left: 5px solid #ff9800; }
-
-body {
-  background: url("../images/bg.jpg") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover; }
+    color: inherit;
+    cursor: pointer; }
 
 h1, h2, h3, h4, h5 {
   font-weight: 300; }
 
 html {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 300; }
+
+blockquote {
+  border-left: 5px solid #ff9800; }
+
+nav .nav-wrapper {
+  margin-top: 20px; }
+
+.side-nav .side-nav-header {
+  height: 176px; }
+.side-nav .userView.userViewNoSession {
+  padding: 100px 32px 0; }
+.side-nav .background img {
+  background: url("../../../uploads/theme/bg.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
+
+body {
+  background: url("../../../uploads/theme/bg.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
+
+.collection .collection-item .switch {
+  display: inline-block;
+  float: right; }
 
 .card .card-image {
   background-size: cover;
@@ -30,6 +49,9 @@ html {
     overflow-y: hidden; }
     .card .card-image.card-image-large img {
       color: #000; }
+  .card .card-image .card-edit {
+    padding: 10px;
+    float: right; }
 .card .card-title h1 {
   font-size: 2.0rem;
   margin: 0 0 0 10px; }
@@ -54,17 +76,5 @@ html {
       width: 100%;
       max-width: 100%;
       height: 200px; } }
-
-.collection .collection-item .switch {
-  display: inline-block;
-  float: right; }
-
-nav .nav-wrapper {
-  margin-top: 20px; }
-
-.side-nav .side-nav-header {
-  height: 176px; }
-.side-nav .userView.userViewNoSession {
-  padding: 100px 32px 0; }
 
 /*# sourceMappingURL=styles.css.map */

@@ -1,11 +1,28 @@
-.side-nav-header {
+nav {
+  .nav-wrapper {
+    margin-top: 20px;
+  }
+}
+
+.side-nav {
+  .side-nav-header {
+    height: 176px;
+  }
+  .userView {
+    &.userViewNoSession {
+      padding: 100px 32px 0;
+    }
+  }
+
   .background {
     img {
-      background: url('../images/bg.jpg') no-repeat center center fixed;
+      background: url('../../../uploads/theme/bg.jpg') no-repeat center center fixed;
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
       background-size: cover;
     }
   }
+
 }
+
