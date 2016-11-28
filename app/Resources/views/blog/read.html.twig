@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ post.title }} | Ari Molzer{% endblock %}
+{% block title %}{{ post.title }} | {{ site_title }}{% endblock %}
 
 {% block body %}
 
@@ -16,13 +16,18 @@
     </style>
 {% endspaceless %}
 
-    <input type="hidden" id="postId" name="postId" value="" />
+    <input type="hidden" id="postId" name="postId" value="{{ post.id }}" />
 
     <div class="section">
         <div class="row">
             <div class="col l12">
                 <div class="card">
                     <div class="card-image card-image-large">
+                        <span class="card-edit">
+                            <a class="btn-floating btn-large waves-effect waves-light orange" href="{{ path('postUpdate', {'id': post.id }) }}">
+                                <i class="material-icons">edit</i>
+                            </a>
+                        </span>
                         <span class="card-title">
                             <h1>{{ post.title }}</h1>
                             <h3>{{ post.subtitle }}</h3>

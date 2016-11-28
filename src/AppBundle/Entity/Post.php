@@ -42,8 +42,8 @@ class Post {
     /**
      * @ORM\Column(name="header_image")
      *
-     * @Assert\NotBlank(message="Please, upload a header image for your post.")
-     * @Assert\File(mimeTypes={ "image/jpeg", "image/png" })
+     * @Assert\NotBlank(message="Please upload a header image for your post.")
+     * @Assert\File(mimeTypes={ "image/jpeg", "image/jpg", "image/png" })
      */
     private $headerImage;
 
@@ -62,7 +62,7 @@ class Post {
      */
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="blogPost")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="Post")
      * @ORM\JoinColumn(name="author", referencedColumnName="id")
      */
     private $author;

@@ -6,7 +6,7 @@ use AppBundle\Util\DateHelper;
 use AppBundle\Util\NavigationHelper;
 use AppBundle\Entity\Post;
 use AppBundle\Entity\User;
-use AppBundle\Form\BlogPostType;
+use AppBundle\Form\PostType;
 use AppBundle\Util\StringHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +52,7 @@ class BlogController extends Controller
     /**
      * @param int $pageNumber
      * @return RedirectResponse|Response
-     * @Route("/blog/page/{pageNumber}", name="blogPage", defaults={"pageNumber" = 1})
+     * @Route("/list/page/{pageNumber}", name="blogPage", defaults={"pageNumber" = 1})
      */
     public function blogPageAction($pageNumber)
     {
@@ -96,9 +96,9 @@ class BlogController extends Controller
     }
 
     /**
-     * @Route("/blog/post/{slug}", name="blogPost")
+     * @Route("/post/{id}/{slug}", name="blogPost", requirements={"id": "\d+"}, defaults={"slug" = null})
      */
-    public function viewBlogPostAction($slug)
+    public function viewBlogPostAction($id, $slug)
     {
 
         // Get the current signed-in user
@@ -106,7 +106,12 @@ class BlogController extends Controller
 
         // query for a single product by its primary key (usually "id")
         $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
-        $blogPost = $repository->findOneBySlug($slug);
+        $blogPost = $repository->findOneById($id);
+
+        // handle invalid slug
+        if ($blogPost === null) {
+            return new RedirectResponse($this->generateUrl('index'));
+        }
 
         // Check if the post has been published for the public
         // Return a response if it hasn't
@@ -120,11 +125,6 @@ class BlogController extends Controller
         // Format date from datetime to readable
         $blogCreatedDate = DateHelper::formatDateDifference($blogPost->getCreated());
 
-        // handle invalid slug
-        if ($blogPost === null) {
-            return new RedirectResponse($this->generateUrl('index'));
-        }
-
         // render template
         return $this->render('blog/read.html.twig', array(
             'user' => $user,
@@ -134,38 +134,9 @@ class BlogController extends Controller
     }
 
     /**
-     * @Route("/blog/post/id/{id}", name="blogPostById")
-     */
-    public function viewBlogPostIdAction($id)
-    {
-        // query for a single product by its primary key (usually "id")
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
-        $blogPost = $repository->findOneById($id);
-
-        // Check if the post has been published for the public
-        // Return a response if it hasn't
-        if (!$blogPost->getPublished()) {
-            return New Response(
-                "This post is not publicly accessible at this time.",
-                Response::HTTP_FORBIDDEN
-            );
-        }
-
-        // handle invalid id
-        if ($blogPost === null) {
-            return new RedirectResponse($this->generateUrl('index'));
-        }
-
-        // render template
-        return $this->render('blog/read.html.twig', array(
-            'post' => $blogPost
-        ));
-    }
-
-    /**
-     * @Route("/blog/new", name="blogNew")
-     * @Route("/blog/add")
-     * @Route("/blog/create")
+     * @Route("/post/new", name="postNew")
+     * @Route("/post/add")
+     * @Route("/post/create")
      */
     public function createBlogAction(Request $request)
     {
@@ -183,7 +154,7 @@ class BlogController extends Controller
 
         // Create a new blog post object and post form
         $newPost = new Post();
-        $form = $this->createForm(BlogPostType::class, $newPost);
+        $form = $this->createForm(PostType::class, $newPost);
 
         // Handle the submit (will only happen on POST)
         $form->handleRequest($request);
@@ -231,58 +202,78 @@ class BlogController extends Controller
         // with the new post form
         return $this->render('blog/create.html.twig', array(
             'user' => $user,
+            'title' => "New post",
             'form' => $form->createView()
         ));
     }
 
     /**
-     * @Route("/blog/post/{slug}/update", name="blogPostUpdate")
+     * @Route("/post/edit/{id}", name="postUpdate")
      */
-    public function updateBlogPostAction($slug)
+    public function updateBlogPostAction(Request $request, $id)
     {
         // Get the current signed-in user
         $user = $this->get('session')->get('user');
 
-        // Check the user is valid
-        if (!$user) {
-            $this->get('session')->getFlashBag()->add('warning', ErrorMessage::ERROR_NOT_SIGNED_IN);
-            return $this->redirectToRoute('index');
-        }
-
-        // Check the user has valid permissions
-        if ($user->getPrivilege() < User::PERMISSION_LEVEL_ADMIN) {
-            $this->get('session')->getFlashBag()->add('warning', ErrorMessage::ERROR_INSUFFICIENT_PERMISSION);
-            return $this->redirectToRoute('index');
-        }
-
         // query for a single product by its primary key (usually "id")
         $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
-        $blogPost = $repository->findOneBySlug($slug);
-
-        // Check if the post has been published for the public
-        // Return a response if it hasn't
-        if (!$blogPost->getPublished()) {
-
-            return New Response(
-                "This post is not publicly accessible at this time.",
-                Response::HTTP_FORBIDDEN
-            );
-
-        }
-
-        // Format date from datetime to readable
-        $blogCreatedDate = DateHelper::formatDateDifference($blogPost->getCreated());
+        $blogPost = $repository->findOneById($id);
 
         // handle invalid slug
         if ($blogPost === null) {
             return new RedirectResponse($this->generateUrl('index'));
         }
 
+        // Update the blog post object on form post
+        $form = $this->createForm(PostType::class, $blogPost);
+
+        // Handle the submit (will only happen on POST)
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // Assign the form data to a variable for ease
+            $updatePost = $form->getData();
+
+            // Set the blog object properties
+            $updatePost->setCreated(new \DateTime(date("Y-m-d H:i:s")));
+            $updatePost->setModified(new \DateTime(date("Y-m-d H:i:s")));
+
+            // URLify the slug provided or URLify the title
+            // if no custom slug was provided
+            if ($updatePost->getSlug()) {
+                $updatePost->setSlug(StringHelper::stringToUrl($updatePost->getSlug()));
+            } else {
+                $updatePost->setSlug(StringHelper::stringToUrl($updatePost->getTitle()));
+            }
+
+            // Upload the image to the 'web/uploads/posts' directory
+            $file = $updatePost->getHeaderImage();
+
+            // Create a name for our new file
+            // Make it super unlikely to generate something not unique
+            $newFileName = md5(uniqid('bpimage_', true)) . rand(10,100) . '.' . $file->guessExtension();
+            $updatePost->setHeaderImage($newFileName);
+
+            // Upload this file into our selected uploads directory
+            $file->move(
+                $this->getParameter('posts_directory'),
+                $newFileName
+            );
+
+            // Persist and save the post to the database
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($updatePost);
+            $em->flush();
+
+            // Redirect to the newly created post
+            return $this->redirectToRoute('blogPost', array('slug' => $updatePost->getSlug()));
+        }
+
         // render template
-        return $this->render('blog/read.html.twig', array(
+        return $this->render('blog/create.html.twig', array(
             'user' => $user,
-            'post' => $blogPost,
-            'dateCreated' => $blogCreatedDate
+            'title' => "Update your post",
+            'form' => $form->createView()
         ));
     }
 
