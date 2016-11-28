@@ -1,3 +1,6 @@
+imports:
+    - { resource: parameters.yml }
+
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
@@ -24,6 +27,11 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+#            remember_me:
+#                secret: '%secret%'
+#                lifetime: 604800 # 1 week in seconds
+#                path: /
 
         #secured_area:
             logout:

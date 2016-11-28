@@ -10,18 +10,18 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
 
-class User
+class User implements UserInterface, \Serializable
 {
 
     // Define user permission levels and their usages
-    // See the manage permission page for details - todo - make manage permission page
-    const ROLE_OWNER = "ROLE_OWNER";
+    const ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN";
     const ROLE_ADMIN = "ROLE_ADMIN";
     const ROLE_USER = "ROLE_USER";
     const ROLE_STEALTH_BANNED = "ROLE_STEALTH_BANNED";
@@ -175,6 +175,48 @@ class User
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    //
+
+    public function getSalt()
+    {
+        // you *may* need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
+
+    public function getRoles()
+    {
+        return array($this->privilege);
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized);
     }
 
 }
