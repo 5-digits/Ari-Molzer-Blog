@@ -1,0 +1,23 @@
+// Custom typeography classes
+
+a {
+  color: inherit;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 300;
+}
+
+html {
+  font-family: $primary-font;
+  font-weight: 300;
+}
+
+blockquote {
+  border-left: 5px solid #ff9800;
+}
