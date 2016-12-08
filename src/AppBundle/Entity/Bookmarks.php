@@ -39,11 +39,13 @@ class Bookmark
 
     /**
      * @ORM\Column(name="date_created", type="datetime")
+     * @Gedmo\Timestampable(on="create")
      */
-    private $created = '1970-01-01 00:00:00';
+    private $created;
 
     /**
      * @ORM\Column(name="date_modified", type="datetime")
+     * @Gedmo\Timestampable(on="update")
      */
-    private $modified = '1970-01-01 00:00:00';
+    private $modified;
 }
