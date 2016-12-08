@@ -5,57 +5,54 @@
 {% block title %}API Documentation{% endblock %}
 {% block body %}
 
-    <div class="documentation container">
-        <div class="section">
-            <div class="row">
-                <div class="col s12 m8 offset-m2">
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="row center-align">
-                                <span class="card-title">API Documentation</span>
-                            </div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row center-align">
+                            <span class="card-title">API Documentation</span>
+                        </div>
 
-                            <blockquote>
-                                <p>This documentation outlines the available API endpoints that are accessible.</p>
-                                <br />
-                                <p>All responses will be provided in JSON format.</p>
-                            </blockquote>
+                        <blockquote>
+                            <p>This documentation outlines the available API endpoints that are accessible.</p>
+                            <br />
+                            <p>All responses will be provided in JSON format.</p>
+                        </blockquote>
 
-                            <div class="row">
-                                <ul id="api-menu" class="collapsible col m10 offset-m1" data-collapsible="expandable">
-                                    <li>
-                                        <div class="collapsible-header"><i class="material-icons">insert_drive_file</i>Blog Posts</div>
-                                        <div class="collapsible-body">
-                                            <p>
-                                                {{ exampleUrl }}/api/v1/BlogPost/{id}
-                                            </p>
-                                            <p>
-                                                <a href="{{ url('dynamicApiById', { 'object' : 'BlogPost', 'id' : 1 }) }}" target="_blank">
-                                                    <span class="orange-text">Working example:</span> {{ url('dynamicApiById', { 'object' : 'BlogPost', 'id' : 1 }) }}
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="collapsible-header"><i class="material-icons">search</i>Search Bar</div>
-                                        <div class="collapsible-body">
-                                            <p>
-                                                {{ exampleUrl }}/search/posts/by/term/{searchTerm}
-                                            </p>
-                                            <p>
-                                                <a href="{{ url('searchTerm', { 'searchTerm' : 'the' }) }}" target="_blank">
-                                                    <span class="orange-text">Working example:</span> {{ url('searchTerm', { 'searchTerm' : 'hello' }) }}
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="row">
+                            <ul id="api-menu" class="collapsible col m10 offset-m1" data-collapsible="expandable">
+                                <li>
+                                    <div class="collapsible-header"><i class="material-icons">insert_drive_file</i>Blog Posts</div>
+                                    <div class="collapsible-body">
+                                        <p>
+                                            {{ exampleUrl }}/api/v1/BlogPost/{id}
+                                        </p>
+                                        <p>
+                                            <a href="{{ url('dynamicApiById', { 'object' : 'BlogPost', 'id' : 1 }) }}" target="_blank">
+                                                <span class="orange-text">Working example:</span> {{ url('dynamicApiById', { 'object' : 'BlogPost', 'id' : 1 }) }}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="collapsible-header"><i class="material-icons">search</i>Search Bar</div>
+                                    <div class="collapsible-body">
+                                        <p>
+                                            {{ exampleUrl }}/search/posts/by/term/{searchTerm}
+                                        </p>
+                                        <p>
+                                            <a href="{{ url('searchTerm', { 'searchTerm' : 'the' }) }}" target="_blank">
+                                                <span class="orange-text">Working example:</span> {{ url('searchTerm', { 'searchTerm' : 'hello' }) }}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
