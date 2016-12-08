@@ -10,6 +10,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -68,19 +69,26 @@ class Post {
     private $author;
 
     /**
-     * @ORM\Column(name="published", type="boolean", options={"default" : 0})
+     * @ORM\Column(name="published", type="boolean", options={"default" : 1})
      */
-    private $published = 0;
+    private $published = 1;
+
+    /**
+     * @ORM\Column(name="archived", type="boolean", options={"default" : 0})
+     */
+    private $archived = 0;
 
     /**
      * @ORM\Column(name="date_created", type="datetime")
+     * @Gedmo\Timestampable(on="create")
      */
-    private $created = '1970-01-01 00:00:00';
+    private $created;
 
     /**
      * @ORM\Column(name="date_modified", type="datetime")
+     * @Gedmo\Timestampable(on="update")
      */
-    private $modified = '1970-01-01 00:00:00';
+    private $modified;
 
     /**
      * @return mixed
@@ -256,6 +264,22 @@ class Post {
     public function setModified($modified)
     {
         $this->modified = $modified;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getArchived()
+    {
+        return $this->archived;
+    }
+
+    /**
+     * @param mixed $archived
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
     }
 
 }
