@@ -19,7 +19,7 @@ class DefaultController extends Controller
         $indexData = $this->loadIndexData();
 
         // Get the current signed-in user
-        $user = $this->get('session')->get('user');
+        $user = $this->getUser();
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', array(
