@@ -19,7 +19,7 @@
                 <p>{{ post.shortDescription }}</p>
             </div>
             <div class="card-action left-align">
-                <a href="{{ path('blogPost', { 'id' : post.id, 'slug': post.slug }) }}">
+                <a href="{{ path('post_read', { 'id' : post.id, 'slug': post.slug }) }}">
                     <button class="btn waves-effect waves-light orange accent-2">Read Now
                         <i class="material-icons right">send</i>
                     </button>
@@ -27,4 +27,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>r

@@ -24,7 +24,7 @@
                 <div class="card">
                     <div class="card-image card-image-large">
                         <span class="card-edit">
-                            <a class="btn-floating btn-large waves-effect waves-light orange" href="{{ path('postUpdate', {'id': post.id }) }}">
+                            <a class="btn-floating btn-large waves-effect waves-light orange" href="{{ path('post_update', {'id': post.id }) }}">
                                 <i class="material-icons">edit</i>
                             </a>
                         </span>
@@ -41,7 +41,7 @@
                                     <div class="left-align">
                                         <div class="chip">
                                             <img src="{{ asset('assets/images/users/1.jpg') }}" alt="Author">
-                                            {{ post.author.firstname }} {{ post.author.surname }}
+                                            {{ post.author.getFormattedFullName }}
                                         </div>
                                         <div class="chip">
                                             {{ dateCreated }}
@@ -51,15 +51,25 @@
 
                                 <div class="col m6">
                                     <div class="grey-text text-darken-2 right-align">
-                                        <a href="#">
+
+                                        <a href="javascript:void(0)" id="post_like" class="{% if user %}{% if like.liked %}red-text{% endif %}{% endif %}">
                                             <i class="material-icons">favorite</i>
                                         </a>
+
                                         <a href="#">
                                             <i class="material-icons">bookmark</i>
                                         </a>
-                                        <a class="no-decorate" href="#">
+
+                                        <a class="no-decorate dropdown-button" href="#" data-activates="share_dd">
                                             <i class="material-icons">share</i>
                                         </a>
+
+                                        <ul id="share_dd" class='dropdown-content'>
+                                            <li><a href="#!"><i class="fa fa-facebook-official" aria-hidden="true"></i> Facebook</a></li>
+                                            <li><a href="#!"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter</a></li>
+                                            <li><a href="#!"><i class="fa fa-google-plus" aria-hidden="true"></i> Google+</a></li>
+                                        </ul>
+
                                     </div>
                                 </div>
                             </div>
@@ -72,5 +82,41 @@
             </div>
         </div>
     </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {% if user %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var $post = $('#post_like');
+            $post.click( function () {
+
+                // Immediately add CSS class for immediate user feedback
+                if ($post.hasClass('red-text')) {
+                    $post.removeClass('red-text');
+                } else {
+                    $post.addClass('red-text');
+                }
+
+                // Make the AJAX request
+                $.ajax(
+                    "{{ url('post_like', {'postId': post.id }) }}"
+                )
+                .fail(function () {
+
+                    // Revert the class if the AJAX request fails
+                    if ($post.hasClass('red-text')) {
+                        $post.removeClass('red-text');
+                    } else {
+                        $post.addClass('red-text');
+                    }
+
+                })
+            });
+        })
+    </script>
+    {% endif %}
 
 {% endblock %}

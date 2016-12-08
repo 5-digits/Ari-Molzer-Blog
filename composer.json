@@ -23,7 +23,9 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "friendsofsymfony/rest-bundle": "^2.1",
-        "stof/doctrine-extensions-bundle": "^1.2"
+        "stof/doctrine-extensions-bundle": "^1.2",
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "components/font-awesome": "^4.7"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

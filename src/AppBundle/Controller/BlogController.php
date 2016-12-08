@@ -9,20 +9,22 @@ use AppBundle\Entity\User;
 use AppBundle\Form\PostType;
 use AppBundle\Util\StringHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Service\ErrorMessage;
+use AppBundle\Entity\PostLike;
 
 class BlogController extends Controller
 {
 
     /**
-     * @Route("/blog/", name="blogIndex")
+     * @Route("/blog/", name="post_index")
      */
-    public function blogIndexAction()
+    public function postIndexAction()
     {
         // Get the current signed-in user
         $user = $this->get('session')->get('user');
@@ -52,9 +54,9 @@ class BlogController extends Controller
     /**
      * @param int $pageNumber
      * @return RedirectResponse|Response
-     * @Route("/list/page/{pageNumber}", name="blogPage", defaults={"pageNumber" = 1})
+     * @Route("/list/page/{pageNumber}", name="post_list_view", defaults={"pageNumber" = 1})
      */
-    public function blogPageAction($pageNumber)
+    public function listPostAction($pageNumber)
     {
         // validation to start page indexing from 1 not 0
         if ($pageNumber == 0 || empty($pageNumber)) {
@@ -96,13 +98,13 @@ class BlogController extends Controller
     }
 
     /**
-     * @Route("/post/{id}/{slug}", name="blogPost", requirements={"id": "\d+"}, defaults={"slug" = null})
+     * @Route("/post/{id}/{slug}", name="post_read", requirements={"id": "\d+"}, defaults={"slug" = null})
      */
-    public function viewBlogPostAction($id, $slug)
+    public function viewPostAction($id, $slug)
     {
 
         // Get the current signed-in user
-        $user = $this->get('session')->get('user');
+        $user = $this->getUser();
 
         // query for a single product by its primary key (usually "id")
         $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
@@ -122,6 +124,18 @@ class BlogController extends Controller
             );
         }
 
+        // Get the PostLike object
+        $like = null;
+        if ($user) {
+
+            $like = $this->getDoctrine()
+                ->getRepository('AppBundle:PostLike')
+                ->findOneBy(Array(
+                    'user' => $user,
+                    'post' => $blogPost
+                ));
+        }
+
         // Format date from datetime to readable
         $blogCreatedDate = DateHelper::formatDateDifference($blogPost->getCreated());
 
@@ -129,28 +143,18 @@ class BlogController extends Controller
         return $this->render('blog/read.html.twig', array(
             'user' => $user,
             'post' => $blogPost,
+            'like' => $like,
             'dateCreated' => $blogCreatedDate
         ));
     }
 
     /**
-     * @Route("/post/new", name="postNew")
-     * @Route("/post/add")
-     * @Route("/post/create")
+     * @Route("/post/new", name="post_create")
      */
-    public function createBlogAction(Request $request)
+    public function createPostAction(Request $request)
     {
-
         // Get the current signed-in user
-        $user = $this->get('session')->get('user');
-
-        // Check the user has privileges to access this route
-        if (!$user || $user->getPrivilege() < User::ROLE_ADMIN) {
-            return New Response(
-                'The signed-in user does not have permission to access this page',
-                Response::HTTP_FORBIDDEN
-            );
-        }
+        $user = $this->getUser();
 
         // Create a new blog post object and post form
         $newPost = new Post();
@@ -164,8 +168,7 @@ class BlogController extends Controller
             $newPost = $form->getData();
 
             // Set the blog object properties
-            $newPost->setCreated(new \DateTime(date("Y-m-d H:i:s")));
-            $newPost->setModified(new \DateTime(date("Y-m-d H:i:s")));
+            $newPost->setAuthor($user);
 
             // URLify the slug provided or URLify the title
             // if no custom slug was provided
@@ -208,12 +211,12 @@ class BlogController extends Controller
     }
 
     /**
-     * @Route("/post/edit/{id}", name="postUpdate")
+     * @Route("/post/edit/{id}", name="post_update")
      */
-    public function updateBlogPostAction(Request $request, $id)
+    public function updatePostAction(Request $request, $id)
     {
         // Get the current signed-in user
-        $user = $this->get('session')->get('user');
+        $user = $this->getUser();
 
         // query for a single product by its primary key (usually "id")
         $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
@@ -233,10 +236,6 @@ class BlogController extends Controller
 
             // Assign the form data to a variable for ease
             $updatePost = $form->getData();
-
-            // Set the blog object properties
-            $updatePost->setCreated(new \DateTime(date("Y-m-d H:i:s")));
-            $updatePost->setModified(new \DateTime(date("Y-m-d H:i:s")));
 
             // URLify the slug provided or URLify the title
             // if no custom slug was provided
@@ -266,7 +265,7 @@ class BlogController extends Controller
             $em->flush();
 
             // Redirect to the newly created post
-            return $this->redirectToRoute('blogPost', array('slug' => $updatePost->getSlug()));
+            return $this->redirectToRoute('post_read', array('id' => $updatePost->getId(), 'slug' => $updatePost->getSlug()));
         }
 
         // render template
@@ -275,6 +274,64 @@ class BlogController extends Controller
             'title' => "Update your post",
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * @Route("/post/delete/{id}", name="post_delete")
+     */
+    public function deletePostAction(Request $request, $id)
+    {
+        $user = $this->getUser();
+
+        // todo - soft delete
+    }
+
+    /**
+     * @Route("/post/like/{postId}", name="post_like")
+     */
+    public function likePostAction($postId) {
+
+        $user = $this->getUser();
+
+        if (!$user) {
+            return New JsonResponse(
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+
+        $post = $this->getDoctrine()
+            ->getRepository('AppBundle:Post')
+            ->find($postId);
+
+        // Find if there is an existing like for this user
+        $existingLike = $this->getDoctrine()
+            ->getRepository('AppBundle:PostLike')
+            ->findOneBy(Array(
+                'user' => $user,
+                'post' => $post
+            ));
+
+        $em = $this->getDoctrine()->getManager();
+
+        // Create a new like if one does not exist for this user
+        if (!$existingLike) {
+            $newLike = new PostLike();
+            $newLike->setUser($user);
+            $em->persist($newLike);
+
+        } else {
+            // Toggle the existing objects value
+            $updateValue = ($existingLike->getLiked() ? false  : true);
+            $existingLike->setLiked($updateValue);
+            $em->persist($existingLike);
+        }
+
+        // Flush the creation or update
+        $em->flush();
+
+        return New JsonResponse(
+            JsonResponse::HTTP_OK
+        );
     }
 
 }
