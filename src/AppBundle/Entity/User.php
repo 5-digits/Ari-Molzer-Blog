@@ -9,15 +9,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
 
-class User implements UserInterface, \Serializable
+class User extends BaseUser
 {
 
     // Define user permission levels and their usages
@@ -32,38 +32,40 @@ class User implements UserInterface, \Serializable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(name="firstname", type="string", length=100, nullable=true)
+     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=3,
+     *     max=100,
+     *     minMessage="The name is too short.",
+     *     maxMessage="The name is too long.",
+     *     groups={"Registration", "Profile"}
+     * )
      */
-    private $firstname;
+    protected $firstname;
 
     /**
      * @ORM\Column(name="surname", type="string", length=100, nullable=true)
+     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=3,
+     *     max=100,
+     *     minMessage="The name is too short.",
+     *     maxMessage="The name is too long.",
+     *     groups={"Registration", "Profile"}
+     * )
      */
-    private $surname;
+    protected $surname;
 
-    /**
-     * @ORM\Column(name="username", type="string", length=100, nullable=true)
-     */
-    private $username;
-
-    /**
-     * @ORM\Column(name="email", type="string", unique=true)
-     * @Assert\Email()
-     */
-    private $email;
-
-    /**
-     * @ORM\Column(name="password", type="string", length=100, nullable=true)
-     */
-    private $password;
-
-    /**
-     * @ORM\Column(name="privilege", type="string", length=20)
-     */
-    private $privilege = self::ROLE_USER;
+    public function __construct()
+    {
+        parent::__construct();
+        // your own logic
+        $this->roles = array(self::ROLE_USER);
+    }
 
     /**
      * @return mixed
@@ -114,109 +116,11 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getUsername()
+    public function getFormattedFullName()
     {
-        return $this->username;
-    }
-
-    /**
-     * @param mixed $username
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPrivilege()
-    {
-        return $this->privilege;
-    }
-
-    /**
-     * @param mixed $privilege
-     */
-    public function setPrivilege($privilege)
-    {
-        $this->privilege = $privilege;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    //
-
-    public function getSalt()
-    {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
-        return null;
-    }
-
-    public function getRoles()
-    {
-        return array($this->privilege);
-    }
-
-    public function eraseCredentials()
-    {
-    }
-
-    /** @see \Serializable::serialize() */
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt,
-        ));
-    }
-
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
-    {
-        list (
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt
-            ) = unserialize($serialized);
+        return $this->firstname . " " . $this->surname;
     }
 
 }
