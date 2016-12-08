@@ -14,12 +14,12 @@ class AdminController extends Controller
 {
 
     /**
-     * @Route("/admin/", name="adminIndex")
+     * @Route("/admin", name="adminIndex")
      */
     public function adminIndexAction()
     {
 
-        $user = $this->get('session')->get('user');
+        $user = $this->getUser();
 
         // Render admin index template
         return $this->render('admin/index.html.twig', array(
@@ -28,12 +28,16 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/documentation/", name="documentation")
+     * @Route("/admin/documentation", name="documentation")
      */
-    public function documentationAction()
+    public function adminDocumentationAction()
     {
+        $user = $this->getUser();
+
         // render template
-        return $this->render('admin/documentation.html.twig', array());
+        return $this->render('admin/documentation.html.twig', array(
+            'user' => $user
+        ));
     }
 
 }

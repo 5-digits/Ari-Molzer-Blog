@@ -1,3 +1,7 @@
+{% if user is not defined %}
+    {% set user = null %}
+{% endif %}
+
 <ul id="slide-out" class="side-nav">
 
     {% if user %}
@@ -17,22 +21,22 @@
                 <div class="background">
                     <img src="{{ asset('uploads/theme/grow.jpg') }}">
                 </div>
-                <a class="btn waves-effect waves-light orange accent-2" href="{{ url('login') }}">Sign In</a>
+                <a class="btn waves-effect waves-light orange accent-2" href="{{ url('fos_user_security_login') }}">Sign In</a>
             </div>
         </li>
     {% endif %}
 
     <li><a href="{{ url('index') }}"><i class="material-icons">home</i>Home</a></li>
-    <li><a href="{{ url('blogIndex') }}"><i class="material-icons">insert_drive_file</i>Posts</a></li>
+    <li><a href="{{ url('post_index') }}"><i class="material-icons">insert_drive_file</i>Posts</a></li>
 
     {% if user %}
-        <li><a href="{{ url('postNew') }}"><i class="material-icons">create</i>New Post</a></li>
+        <li><a href="{{ url('post_create') }}"><i class="material-icons">create</i>New Post</a></li>
     {% endif %}
 
     <li><div class="divider"></div></li>
 
     {% if user %}
-        <li><a href="#!"><i class="material-icons">account_box</i>My Profile</a></li>
+        <li><a href="{{ url('fos_user_profile_edit') }}"><i class="material-icons">account_box</i>My Profile</a></li>
         <li><a href="{{ url('adminIndex') }}"><i class="material-icons">settings</i>Settings</a></li>
     {% endif %}
 
@@ -40,6 +44,6 @@
 
     {% if user %}
         <li><div class="divider"></div></li>
-        <li><a href="{{ url('logout') }}">Sign Out</a></li>
+        <li><a href="{{ url('fos_user_security_logout') }}">Sign Out</a></li>
     {% endif %}
 </ul>
