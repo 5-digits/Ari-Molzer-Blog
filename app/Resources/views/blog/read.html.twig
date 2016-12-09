@@ -52,7 +52,7 @@
                                 <div class="col m6">
                                     <div class="grey-text text-darken-2 right-align">
 
-                                        <a href="javascript:void(0)" id="post_like" class="{% if user %}{% if like.liked %}red-text{% endif %}{% endif %}">
+                                        <a href="javascript:void(0)" onclick="PostLikeModule.togglePostLike()" id="post_like" class="{% if user %}{% if like.liked %}red-text{% endif %}{% endif %}">
                                             <i class="material-icons">favorite</i>
                                         </a>
 
@@ -82,41 +82,5 @@
             </div>
         </div>
     </div>
-
-{% endblock %}
-
-{% block javascripts %}
-
-    {% if user %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            var $post = $('#post_like');
-            $post.click( function () {
-
-                // Immediately add CSS class for immediate user feedback
-                if ($post.hasClass('red-text')) {
-                    $post.removeClass('red-text');
-                } else {
-                    $post.addClass('red-text');
-                }
-
-                // Make the AJAX request
-                $.ajax(
-                    "{{ url('post_like', {'postId': post.id }) }}"
-                )
-                .fail(function () {
-
-                    // Revert the class if the AJAX request fails
-                    if ($post.hasClass('red-text')) {
-                        $post.removeClass('red-text');
-                    } else {
-                        $post.addClass('red-text');
-                    }
-
-                })
-            });
-        })
-    </script>
-    {% endif %}
 
 {% endblock %}
