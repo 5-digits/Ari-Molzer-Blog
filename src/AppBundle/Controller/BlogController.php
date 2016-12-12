@@ -293,15 +293,26 @@ class BlogController extends Controller
 
         $user = $this->getUser();
 
-        if (!$user) {
+        // Check the user and the passed parameter are not invalid
+        if (!$user || !$postId) {
             return New JsonResponse(
                 JsonResponse::HTTP_BAD_REQUEST
             );
         }
 
+        // Get the post from the DB
         $post = $this->getDoctrine()
             ->getRepository('AppBundle:Post')
             ->find($postId);
+
+
+        // Check the post is valid
+        if (!$post) {
+            return New JsonResponse(
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+
 
         // Find if there is an existing like for this user
         $existingLike = $this->getDoctrine()
@@ -317,6 +328,7 @@ class BlogController extends Controller
         if (!$existingLike) {
             $newLike = new PostLike();
             $newLike->setUser($user);
+            $newLike->setPost($post);
             $em->persist($newLike);
 
         } else {

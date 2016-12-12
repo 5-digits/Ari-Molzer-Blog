@@ -21,7 +21,7 @@
     <div class="section">
         <div class="row">
             <div class="col l12">
-                <div class="card">
+                <article class="card">
                     <div class="card-image card-image-large">
                         <span class="card-edit no-print">
                             <a class="btn-floating btn-large waves-effect waves-light orange" href="{{ path('post_update', {'id': post.id }) }}">
@@ -52,7 +52,7 @@
                                 <div class="col m6 no-print">
                                     <div class="grey-text text-darken-2 right-align">
 
-                                        <a href="javascript:void(0)" onclick="PostLikeModule.togglePostLike()" id="post_like" class="{% if user %}{% if like.liked %}red-text{% endif %}{% endif %}">
+                                        <a href="javascript:void(0)" id="post_like" {% if user %}onclick="PostLikeModule.togglePostLike({{ post.id }})" class="{% if like and like.liked == true %}red-text{% endif %}{% endif %}">
                                             <i class="material-icons">favorite</i>
                                         </a>
 
@@ -78,7 +78,7 @@
                             <p class="card-content-body">{{ post.body | nl2br }}</p>
                         </div>
                     </div>
-                </div>
+                </article>
             </div>
         </div>
     </div>
