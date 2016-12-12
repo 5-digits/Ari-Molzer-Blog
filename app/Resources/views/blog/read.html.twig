@@ -23,7 +23,7 @@
             <div class="col l12">
                 <div class="card">
                     <div class="card-image card-image-large">
-                        <span class="card-edit">
+                        <span class="card-edit no-print">
                             <a class="btn-floating btn-large waves-effect waves-light orange" href="{{ path('post_update', {'id': post.id }) }}">
                                 <i class="material-icons">edit</i>
                             </a>
@@ -40,7 +40,7 @@
                                 <div class="col m6">
                                     <div class="left-align">
                                         <div class="chip">
-                                            <img src="{{ asset('assets/images/users/1.jpg') }}" alt="Author">
+                                            <img src="{{ asset('assets/images/users/1.jpg') }}" class="no-print" alt="Author - {{ post.author.getFormattedFullName }}">
                                             {{ post.author.getFormattedFullName }}
                                         </div>
                                         <div class="chip">
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col m6">
+                                <div class="col m6 no-print">
                                     <div class="grey-text text-darken-2 right-align">
 
                                         <a href="javascript:void(0)" onclick="PostLikeModule.togglePostLike()" id="post_like" class="{% if user %}{% if like.liked %}red-text{% endif %}{% endif %}">

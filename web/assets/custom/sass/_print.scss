@@ -1,0 +1,13 @@
+@media print {
+
+  .no-print {
+    display: none;
+  }
+
+  // Special print rules
+
+  body {
+    background: none;
+  }
+
+}
