@@ -9,6 +9,7 @@
 namespace AppBundle\Dao;
 
 use AppBundle\Entity\Post;
+use AppBundle\Entity\PostLike;
 use AppBundle\Util\StringHelper;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
@@ -84,6 +85,26 @@ class BlogDao
                 ->where('bp.published = 1')
                 ->getQuery();
         }
+
+        // Return query results
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Count the number of posts in the database
+     * By default, only get published posts
+     *
+     * @param PostLike $post
+     * @return int
+     */
+    function getNumberOfLikesByPost($post) {
+
+        $query = $this->doctrine->getManager()->createQueryBuilder()
+            ->select('COUNT(pl)')
+            ->from('AppBundle:PostLike', 'pl')
+            ->where('pl.liked = :post')
+            ->setParameter('post', $post)
+            ->getQuery();
 
         // Return query results
         return $query->getSingleScalarResult();

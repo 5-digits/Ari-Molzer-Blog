@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Service\ErrorMessage;
 use AppBundle\Entity\PostLike;
+use AppBundle\Entity\PostBookmark;
 
 class BlogController extends Controller
 {
@@ -124,17 +125,30 @@ class BlogController extends Controller
             );
         }
 
-        // Get the PostLike object
-        $like = null;
+        // Get the PostLike and PostBookmark object
+        $userLike = null;
+        $userBookmark = null;
         if ($user) {
 
-            $like = $this->getDoctrine()
+            // PostLike
+            $userLike = $this->getDoctrine()
                 ->getRepository('AppBundle:PostLike')
                 ->findOneBy(Array(
                     'user' => $user,
                     'post' => $blogPost
                 ));
+
+            // PostBookmark
+            $userBookmark = $this->getDoctrine()
+                ->getRepository('AppBundle:PostBookmark')
+                ->findOneBy(Array(
+                    'user' => $user,
+                    'post' => $blogPost
+                ));
         }
+
+        // Get number of post likes
+        $likesCount = $this->get('blogs')->getNumberOfLikesByPost($blogPost);
 
         // Format date from datetime to readable
         $blogCreatedDate = DateHelper::formatDateDifference($blogPost->getCreated());
@@ -143,7 +157,9 @@ class BlogController extends Controller
         return $this->render('blog/read.html.twig', array(
             'user' => $user,
             'post' => $blogPost,
-            'like' => $like,
+            'likesCount' => $likesCount,
+            'userLike' => $userLike,
+            'userBookmark' => $userBookmark,
             'dateCreated' => $blogCreatedDate
         ));
     }
@@ -336,6 +352,64 @@ class BlogController extends Controller
             $updateValue = ($existingLike->getLiked() ? false  : true);
             $existingLike->setLiked($updateValue);
             $em->persist($existingLike);
+        }
+
+        // Flush the creation or update
+        $em->flush();
+
+        return New JsonResponse(
+            JsonResponse::HTTP_OK
+        );
+    }
+
+    /**
+     * @Route("/post/bookmark/{postId}", name="post_bookmark")
+     */
+    public function bookmarkPostAction($postId) {
+
+        $user = $this->getUser();
+
+        // Check the user and the passed parameter are not invalid
+        if (!$user || !$postId) {
+            return New JsonResponse(
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+
+        // Get the post from the DB
+        $post = $this->getDoctrine()
+            ->getRepository('AppBundle:Post')
+            ->find($postId);
+
+        // Check the post is valid
+        if (!$post) {
+            return New JsonResponse(
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+
+        // Find if there is an existing like for this user
+        $existingBookmark = $this->getDoctrine()
+            ->getRepository('AppBundle:PostBookmark')
+            ->findOneBy(Array(
+                'user' => $user,
+                'post' => $post
+            ));
+
+        $em = $this->getDoctrine()->getManager();
+
+        // Create a new like if one does not exist for this user
+        if (!$existingBookmark) {
+            $newBookmark = new PostBookmark();
+            $newBookmark->setUser($user);
+            $newBookmark->setPost($post);
+            $em->persist($newBookmark);
+
+        } else {
+            // Toggle the existing objects value
+            $updateValue = ($existingBookmark->getBookmarked() ? false  : true);
+            $existingBookmark->setBookmarked($updateValue);
+            $em->persist($existingBookmark);
         }
 
         // Flush the creation or update

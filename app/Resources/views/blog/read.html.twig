@@ -2,6 +2,8 @@
 
 {% block title %}{{ post.title }} | {{ site_title }}{% endblock %}
 
+{% block seo %}<meta name="description" content="{{ post.shortDescription }}">{% endblock %}
+
 {% block body %}
 
 {% spaceless %}
@@ -18,7 +20,7 @@
 
     <input type="hidden" id="postId" name="postId" value="{{ post.id }}" />
 
-    <div class="section">
+    <div class="section post">
         <div class="row">
             <div class="col l12">
                 <article class="card">
@@ -52,12 +54,16 @@
                                 <div class="col m6 no-print">
                                     <div class="grey-text text-darken-2 right-align">
 
-                                        <a href="javascript:void(0)" id="post_like" {% if user %}onclick="PostLikeModule.togglePostLike({{ post.id }})" class="{% if like and like.liked == true %}red-text{% endif %}{% endif %}">
+                                        <div class="chip">
+                                            <span id="post_like_count">{{ likesCount }}</span>
+                                        </div>
+
+                                        <a href="javascript:void(0)" id="post_like" {% if user %}onclick="PostLikeModule.togglePostLike({{ post.id }})" class="{% if userLike and userLike.liked == true %}red-text{% endif %}{% endif %}">
                                             <i class="material-icons">favorite</i>
                                         </a>
 
-                                        <a href="#">
-                                            <i class="material-icons">bookmark</i>
+                                        <a href="javascript:void(0)" id="post_bookmark" {% if user %}onclick="PostBookmarkModule.togglePostBookmark({{ post.id }})">
+                                            <i class="material-icons" id="post_bookmark_label">{% if userBookmark and userBookmark.bookmarked == true %}bookmark{% else %}bookmark_border{% endif %}{% endif %}</i>
                                         </a>
 
                                         <a class="no-decorate dropdown-button" href="#" data-activates="share_dd">

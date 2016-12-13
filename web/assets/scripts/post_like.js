@@ -7,13 +7,17 @@ var PostLikeModule = (function (api) {
     return {
         togglePostLike: function (postId) {
 
-            var $post = $('#post_like');
+            var $postLike = $('#post_like');
+            var $postLikeCount = $('#post_like_count');
+            var $postLikeCountInt = parseInt($('#post_like_count').html());
 
             // Immediately add CSS class for instant user feedback
-            if ($post.hasClass('red-text')) {
-                $post.removeClass('red-text');
+            if ($postLike.hasClass('red-text')) {
+                $postLike.removeClass('red-text');
+                $postLikeCount.html($postLikeCountInt - 1);
             } else {
-                $post.addClass('red-text');
+                $postLike.addClass('red-text');
+                $postLikeCount.html($postLikeCountInt + 1);
             }
 
             api.likePost(postId)
@@ -24,10 +28,12 @@ var PostLikeModule = (function (api) {
                 .catch(function() {
                     // Revert the class if the AJAX request fails
                     console.log("Fail");
-                    if ($post.hasClass('red-text')) {
-                        $post.removeClass('red-text');
+                    if ($postLike.hasClass('red-text')) {
+                        $postLike.removeClass('red-text');
+                        $postLikeCount.html($postLikeCountInt - 1);
                     } else {
-                        $post.addClass('red-text');
+                        $postLike.addClass('red-text');
+                        $postLikeCount.html($postLikeCountInt + 1);
                     }
                 });
         }
