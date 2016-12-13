@@ -2,11 +2,16 @@
 
 {% block title %}{{ post.title }} | {{ site_title }}{% endblock %}
 
-{% block seo %}<meta name="description" content="{{ post.shortDescription }}">{% endblock %}
+{% block seo %}
+    <meta name="description" content="{{ post.shortDescription }}">
+{% endblock %}
 
 {% block body %}
 
-{% spaceless %}
+    {% if not user %}
+        {{ include('::shared/components/login-modal.html.twig') }}
+    {% endif %}
+
     <style>
         .card-image-large {
             background: url({{ asset('uploads/posts/') }}{{ post.headerImage }});
@@ -16,7 +21,6 @@
             background-size: cover;
         }
     </style>
-{% endspaceless %}
 
     <input type="hidden" id="postId" name="postId" value="{{ post.id }}" />
 
@@ -25,15 +29,20 @@
             <div class="col l12">
                 <article class="card">
                     <div class="card-image card-image-large">
+
                         <span class="card-edit no-print">
-                            <a class="btn-floating btn-large waves-effect waves-light orange" href="{{ path('post_update', {'id': post.id }) }}">
-                                <i class="material-icons">edit</i>
-                            </a>
+                            {% if user %}
+                                <a class="btn-floating btn-large waves-effect waves-light orange" href="{{ path('post_update', {'id': post.id }) }}">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            {% endif %}
                         </span>
+
                         <span class="card-title">
                             <h1>{{ post.title }}</h1>
                             <h3>{{ post.subtitle }}</h3>
                         </span>
+
                     </div>
                     <div class="card-content">
                         <div class="row">
@@ -58,12 +67,12 @@
                                             <span id="post_like_count">{{ likesCount }}</span>
                                         </div>
 
-                                        <a href="javascript:void(0)" id="post_like" {% if user %}onclick="PostLikeModule.togglePostLike({{ post.id }})" class="{% if userLike and userLike.liked == true %}red-text{% endif %}{% endif %}">
+                                        <a href="javascript:void(0)" id="post_like" onclick="{% if user %}PostLikeModule.togglePostLike({{ post.id }}){% else %}$('#sign-in-modal').openModal();{% endif %}" {% if user %}class="{% if userLike and userLike.liked == true %}red-text{% endif %}{% endif %}">
                                             <i class="material-icons">favorite</i>
                                         </a>
 
-                                        <a href="javascript:void(0)" id="post_bookmark" {% if user %}onclick="PostBookmarkModule.togglePostBookmark({{ post.id }})">
-                                            <i class="material-icons" id="post_bookmark_label">{% if userBookmark and userBookmark.bookmarked == true %}bookmark{% else %}bookmark_border{% endif %}{% endif %}</i>
+                                        <a href="javascript:void(0)" id="post_bookmark" onclick="{% if user %}PostBookmarkModule.togglePostBookmark({{ post.id }}){% else %}$('#sign-in-modal').openModal();{% endif %}">
+                                            <i class="material-icons" id="post_bookmark_label">{% if userBookmark and userBookmark.bookmarked == true %}bookmark{% else %}bookmark_border{% endif %}</i>
                                         </a>
 
                                         <a class="no-decorate dropdown-button" href="#" data-activates="share_dd">
@@ -82,6 +91,17 @@
                         </div>
                         <div class="container">
                             <p class="card-content-body">{{ post.body | nl2br }}</p>
+                        </div>
+                    </div>
+
+                    <div class="card-action">
+                        <div class="row">
+                            <div class="col m8 offset-m2">
+                                <h6>12 Comments</h6>
+
+
+
+                            </div>
                         </div>
                     </div>
                 </article>
