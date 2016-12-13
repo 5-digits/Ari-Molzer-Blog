@@ -41,7 +41,7 @@ class SearchApiController extends Controller
         $i = 0;
         foreach ($searchResult as $result) {
             // generate the url
-            $url = $this->generateUrl('blogPost', array('id' => $result['id'], 'slug' => $result['slug']));
+            $url = $this->generateUrl('post_read', array('id' => $result['id'], 'slug' => $result['slug']));
             // add the url to the searchResults array
             $searchResult[$i]['url'] = $url;
             $i++;
