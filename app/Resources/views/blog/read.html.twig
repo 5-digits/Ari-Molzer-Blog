@@ -69,11 +69,11 @@
                                             <span id="post_like_count">{{ likesCount }}</span>
                                         </div>
 
-                                        <a href="javascript:void(0)" id="post_like" onclick="{% if user %}PostLikeModule.togglePostLike({{ post.id }}){% else %}$('#sign-in-modal').openModal();{% endif %}" {% if user %}class="{% if userLike and userLike.liked == true %}red-text{% endif %}{% endif %}">
+                                        <a href="javascript:void(0)" id="post_like" onclick="{% if user %}PostLikeModule.togglePostLike({{ post.id }}){% else %}$('#login-modal').openModal();{% endif %}" {% if user %}class="{% if userLike and userLike.liked == true %}red-text{% endif %}{% endif %}">
                                             <i class="material-icons">favorite</i>
                                         </a>
 
-                                        <a href="javascript:void(0)" id="post_bookmark" onclick="{% if user %}PostBookmarkModule.togglePostBookmark({{ post.id }}){% else %}$('#sign-in-modal').openModal();{% endif %}">
+                                        <a href="javascript:void(0)" id="post_bookmark" onclick="{% if user %}PostBookmarkModule.togglePostBookmark({{ post.id }}){% else %}$('#login-modal').openModal();{% endif %}">
                                             <i class="material-icons" id="post_bookmark_label">{% if userBookmark and userBookmark.bookmarked == true %}bookmark{% else %}bookmark_border{% endif %}</i>
                                         </a>
 
