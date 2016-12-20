@@ -86,4 +86,7 @@ body {
 .post .material-icons {
   vertical-align: middle; }
 
+#login-modal .card {
+  margin: 0; }
+
 /*# sourceMappingURL=styles.css.map */

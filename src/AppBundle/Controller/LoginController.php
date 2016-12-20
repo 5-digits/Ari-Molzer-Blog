@@ -25,8 +25,6 @@ class LoginController extends BaseController
      *
      * @return Response
      */
-
-
     public function loginAction(Request $request)
     {
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
