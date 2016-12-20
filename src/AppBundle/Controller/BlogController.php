@@ -2,12 +2,14 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\LoginType;
 use AppBundle\Util\DateHelper;
 use AppBundle\Util\NavigationHelper;
 use AppBundle\Entity\Post;
 use AppBundle\Entity\User;
 use AppBundle\Form\PostType;
 use AppBundle\Util\StringHelper;
+use FOS\UserBundle\FOSUserBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -128,6 +130,7 @@ class BlogController extends Controller
         // Get the PostLike and PostBookmark object
         $userLike = null;
         $userBookmark = null;
+        $loginForm = null;
         if ($user) {
 
             // PostLike
