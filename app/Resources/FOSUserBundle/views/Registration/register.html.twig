@@ -5,18 +5,13 @@
     <div class="row">
         <div class="card no-padding col s12 l6 offset-l3">
             <div class="card-content blue-grey white-text">
-                <span class="card-title">Sign In</span>
+                <span class="card-title">Sign Up</span>
             </div>
 
             <div class="card-content">
                 {% block fos_user_content %}
-                    {{ include('FOSUserBundle:Security:login_content.html.twig') }}
+                    {% include "FOSUserBundle:Registration:register_content.html.twig" %}
                 {% endblock fos_user_content %}
-            </div>
-
-            <div class="card-action">
-                <a href="{{ path('fos_user_resetting_request') }}">Lost your password?</a>
-                <a href="{{ path('fos_user_registration_register') }}" class="right">Sign Up</a>
             </div>
 
         </div>
