@@ -18,7 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use FOS\UserBundle\Controller\SecurityController as BaseController;
 
-class LoginController extends BaseController
+class SecurityController extends BaseController
 {
     /**
      * @param Request $request

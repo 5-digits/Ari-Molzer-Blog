@@ -1,0 +1,20 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="card no-padding col l12">
+            <div class="card-content blue-grey white-text">
+                <span class="card-title">Profile: {{ user.firstname ~ ' ' ~ user.surname }}</span>
+            </div>
+
+            <div class="card-content">
+                {% block fos_user_content %}
+                    {% include "FOSUserBundle:Profile:show_content.html.twig" %}
+                {% endblock fos_user_content %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
