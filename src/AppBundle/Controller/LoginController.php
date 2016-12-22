@@ -109,6 +109,6 @@ class LoginController extends BaseController
      */
     protected function renderLoginModal(array $data)
     {
-        return $this->render(':shared/components:login-modal.html.twig', $data);
+        return $this->render(':Security:login-modal.html.twig', $data);
     }
 }

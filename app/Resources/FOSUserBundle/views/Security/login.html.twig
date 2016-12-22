@@ -1,0 +1,19 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="card no-padding col s12 l6 offset-l3">
+            <div class="card-content blue-grey white-text">
+                <span class="card-title">Sign In</span>
+            </div>
+
+            <div class="card-content">
+                {% block fos_user_content %}
+                    {{ include('FOSUserBundle:Security:login_content.html.twig') }}
+                {% endblock fos_user_content %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
