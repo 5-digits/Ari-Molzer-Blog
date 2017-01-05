@@ -9,9 +9,19 @@
             </div>
 
             <div class="card-content">
+
+                <span class="card-edit no-print">
+                    {% if user %}
+                        <a class="btn-floating btn-large waves-effect waves-light orange right" href="{{ path('fos_user_profile_edit') }}">
+                            <i class="material-icons">edit</i>
+                        </a>
+                    {% endif %}
+                </span>
+
                 {% block fos_user_content %}
                     {% include "FOSUserBundle:Profile:show_content.html.twig" %}
                 {% endblock fos_user_content %}
+
             </div>
 
         </div>

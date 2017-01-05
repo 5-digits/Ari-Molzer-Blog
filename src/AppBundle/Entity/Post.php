@@ -59,10 +59,6 @@ class Post {
     private $body;
 
     /**
-     * @ORM\Column(name="author", type="integer")
-     */
-
-    /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="Post")
      * @ORM\JoinColumn(name="author", referencedColumnName="id")
      */

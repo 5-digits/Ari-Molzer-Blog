@@ -10,7 +10,7 @@
 
     {% if not user %}
         {{ render(controller(
-        'AppBundle:Login:loginModal'
+        'AppBundle:Security:loginModal'
         )) }}
     {% endif %}
 
@@ -57,7 +57,7 @@
                                             {{ post.author.getFormattedFullName }}
                                         </div>
                                         <div class="chip">
-                                            {{ dateCreated }}
+                                            Published: {{ dateCreated | default('Unknown') }}
                                         </div>
                                     </div>
                                 </div>
