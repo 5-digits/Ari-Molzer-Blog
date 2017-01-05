@@ -20,5 +20,4 @@ use AppBundle\Form\LoginType;
 class SessionController extends Controller
 {
 
-
 }

@@ -8,7 +8,6 @@
 
 namespace AppBundle\Controller;
 
-use FOS\UserBundle\Controller\SecurityController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +15,9 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use FOS\UserBundle\Controller\SecurityController as BaseController;
+use FOS\UserBundle\Controller\SecurityController as SecurityBaseController;
 
-class SecurityController extends BaseController
+class SecurityController extends SecurityBaseController
 {
     /**
      * @param Request $request

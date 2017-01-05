@@ -1,32 +1,36 @@
 <?php
-
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+/**
+ * Created by PhpStorm.
+ * User: arimolzer
+ * Date: 16/12/16
+ * Time: 4:32 PM
  */
 
-namespace FOS\UserBundle\Controller;
+namespace AppBundle\Controller;
 
-use FOS\UserBundle\Controller\SecurityController;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\FOSUserEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use FOS\UserBundle\Controller\ProfileController as BaseController;
+use FOS\UserBundle\Controller\ProfileController as ProfileBaseController;
+use AppBundle\Controller\SecurityController;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Controller managing the user profile.
+ * ProfileController override.
  *
- * @author Christophe Coevoet <stof@notk.org>
+ * @author Ari Molzer
  */
-class ProfileController extends BaseController
+class ProfileController extends ProfileBaseController
 {
 
     /**
@@ -83,6 +87,26 @@ class ProfileController extends BaseController
         return $this->render('FOSUserBundle:Profile:edit.html.twig', array(
             'user' => $user,
             'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @param string $username
+     * @return RedirectResponse|Response
+     * @Route("/profile/{username}")
+     */
+    public function showUserByIdAction($username)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+        $user = $repository->findOneByUsername($username);
+
+        $sessionUser = $this->getUser();
+        if (!is_object($sessionUser) || !$sessionUser instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        return $this->render('FOSUserBundle:Profile:show.html.twig', array(
+            'user' => $user,
         ));
     }
 }
