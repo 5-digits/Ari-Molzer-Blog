@@ -26,19 +26,25 @@
 
     <input type="hidden" id="postId" name="postId" value="{{ post.id }}" />
 
+    {% if user %}
+        <div class="fixed-action-btn horizontal no-print">
+            <a class="btn-floating btn-large red" href="{{ path('post_update', {'id': post.id }) }}">
+                <i class="large material-icons">mode_edit</i>
+            </a>
+            <ul>
+                <li><a class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Edit" href="{{ path('post_update', {'id': post.id }) }}"><i class="material-icons">edit</i></a></li>
+                <li><a class="btn-floating yellow darken-1 tooltipped" data-position="top" data-delay="50" data-tooltip="Email Author" href="mailto:{{ post.author.email }}"><i class="material-icons">mail</i></a></li>
+                <li><a class="btn-floating green tooltipped" data-position="top" data-delay="50" data-tooltip="Publish"><i class="material-icons">publish</i></a></li>
+                <li><a class="btn-floating blue tooltipped" data-position="top" data-delay="50" data-tooltip="View Stats"><i class="material-icons">insert_chart</i></a></li>
+            </ul>
+        </div>
+    {% endif %}
+
     <div class="section post">
         <div class="row">
             <div class="col l12">
                 <article class="card">
                     <div class="card-image card-image-large">
-
-                        <span class="card-edit no-print">
-                            {% if user %}
-                                <a class="btn-floating btn-large waves-effect waves-light orange" href="{{ path('post_update', {'id': post.id }) }}">
-                                    <i class="material-icons">edit</i>
-                                </a>
-                            {% endif %}
-                        </span>
 
                         <span class="card-title">
                             <h1>{{ post.title }}</h1>
