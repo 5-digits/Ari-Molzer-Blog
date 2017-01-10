@@ -1,0 +1,33 @@
+@import "_variables";
+
+$placement_list: (
+  top, bottom, left, right
+);
+
+$padmarge_amount_list: (
+  none: 0px,
+  small: 10px,
+  medium: 25px,
+  large: 50px,
+  x-large: 100px
+);
+
+@each $placement in $placement_list {
+
+  @each $key, $value in $padmarge_amount_list {
+
+    .padding-#{$placement}-#{$key} {
+      padding-#{$placement}: $value !important;
+    }
+  }
+}
+
+@each $placement in $placement_list {
+
+  @each $key, $value in $padmarge_amount_list {
+
+    .margin-#{$placement}-#{$key} {
+      margin-#{$placement}: $value !important;
+    }
+  }
+}

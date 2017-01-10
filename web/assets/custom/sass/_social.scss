@@ -1,0 +1,24 @@
+@import "_variables";
+
+$social_list: (
+  facebook: $facebook_color,
+  google-plus: $google_plus_color,
+  google: $google_color,
+  twitter: $twitter_color
+);
+
+@each $key, $value in $social_list {
+
+  .btn {
+
+    &.background-#{$key} {
+      background-color: $value;
+      color: #ffffff;
+
+      &:hover {
+        background-color: darken($value, 10);
+        color: #ffffff;
+      }
+    }
+  }
+}

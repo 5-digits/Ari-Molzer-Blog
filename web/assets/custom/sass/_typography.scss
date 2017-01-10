@@ -27,3 +27,50 @@ blockquote {
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 1000px white inset !important;
 }
+
+.strike {
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+
+  >span {
+    position: relative;
+    display: inline-block;
+    color: $label-font-color;
+    size: 0.8rem;
+  }
+
+  >span:before, >span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+    background: rgba(160, 160, 160, 0.2);
+  }
+
+  >span:before {
+    right: 100%;
+    margin-right: 15px;
+  }
+
+  >span:after {
+    left: 100%;
+    margin-left: 15px;
+  }
+
+}
+
+// Override some material design oddities
+.case-upper {
+  text-transform: uppercase;
+}
+
+.case-lower {
+  text-transform: lowercase;
+}
+
+.case-normal {
+  text-transform: none;
+}
