@@ -9,21 +9,19 @@
 namespace AppBundle\Controller;
 
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\Form\Factory\FactoryInterface;
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
-use Symfony\Component\Form\FormEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\UserBundle\Controller\ProfileController as ProfileBaseController;
-use AppBundle\Controller\SecurityController;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * ProfileController override.
@@ -87,26 +85,6 @@ class ProfileController extends ProfileBaseController
         return $this->render('FOSUserBundle:Profile:edit.html.twig', array(
             'user' => $user,
             'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * @param string $username
-     * @return RedirectResponse|Response
-     * @Route("/profile/{username}")
-     */
-    public function showUserByIdAction($username)
-    {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:User');
-        $user = $repository->findOneByUsername($username);
-
-        $sessionUser = $this->getUser();
-        if (!is_object($sessionUser) || !$sessionUser instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
-        return $this->render('FOSUserBundle:Profile:show.html.twig', array(
-            'user' => $user,
         ));
     }
 }

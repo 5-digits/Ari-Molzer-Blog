@@ -5,7 +5,7 @@
     <div class="row">
         <div class="card no-padding col l12">
             <div class="card-content blue-grey white-text">
-                <span class="card-title">Profile: {{ user.firstname ~ ' ' ~ user.surname }}</span>
+                <span class="card-title">Profile: {{ user.getFormattedFullName() }}</span>
             </div>
 
             <div class="card-content">

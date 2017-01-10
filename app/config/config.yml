@@ -80,6 +80,10 @@ fos_user:
         form:
             type: AppBundle\Form\RegistrationType
 
+    profile:
+        form:
+            type: AppBundle\Form\ProfileFormType
+
 stof_doctrine_extensions:
     default_locale: en_US
     orm:

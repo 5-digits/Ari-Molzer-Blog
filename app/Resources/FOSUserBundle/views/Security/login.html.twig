@@ -3,7 +3,7 @@
 {% block content %}
 
     <div class="row">
-        <div class="card no-padding col s12 l6 offset-l3">
+        <div class="card no-padding col s12 l8 offset-l2">
             <div class="card-content blue-grey white-text">
                 <span class="card-title">Sign In</span>
             </div>
@@ -12,13 +12,26 @@
                 {% block fos_user_content %}
                     {{ include('FOSUserBundle:Security:login_content.html.twig') }}
                 {% endblock fos_user_content %}
-            </div>
 
-            <div class="card-action">
-                <a href="{{ path('fos_user_resetting_request') }}">Lost your password?</a>
-                <a href="{{ path('fos_user_registration_register') }}" class="right">Sign Up</a>
-            </div>
+                <div class="strike">
+                    <span>Or connect with:</span>
+                </div>
 
+                <div class="row center padding-top-small">
+                    <div class="col s6">
+                        <a class="waves-effect waves-light btn btn-large background-google-plus"><i class="fa fa-google-plus left" aria-hidden="true"></i>Google+</a>
+                    </div>
+                    <div class="col s6">
+                        <a class="waves-effect waves-light btn btn-large background-facebook"><i class="fa fa-facebook-f left" aria-hidden="true"></i>Facebook</a>
+                    </div>
+                </div>
+
+                <div class="card-action padding-bottom-none">
+                    <a href="{{ path('fos_user_resetting_request') }}">Lost your password?</a>
+                    <a href="{{ path('fos_user_registration_register') }}" class="right">Sign Up</a>
+                </div>
+
+            </div>
         </div>
     </div>
 

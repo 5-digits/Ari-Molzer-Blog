@@ -1,7 +1,11 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
-    {{ form_widget(form) }}
+
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.googlePlusId) }}
+    {{ form_row(form.current_password) }}
 <div>
     <input type="submit" value="{{ 'profile.edit.submit'|trans }}" class="btn waves-effect waves-light modal-trigger orange accent-2 right waves-input-wrapper" />
 </div>

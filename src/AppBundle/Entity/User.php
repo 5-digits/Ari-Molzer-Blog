@@ -36,7 +36,6 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(name="firstname", type="string", length=100, nullable=true)
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
      * @Assert\Length(
      *     min=3,
      *     max=100,
@@ -49,7 +48,6 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(name="surname", type="string", length=100, nullable=true)
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
      * @Assert\Length(
      *     min=3,
      *     max=100,
@@ -62,21 +60,15 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(name="google_plus_id", type="string", length=100, nullable=true)
-     * @Assert\NotBlank(message="Please enter your Google+ Account URL.", groups={"Profile"})
      * @Assert\Length(
      *     min=10,
      *     max=100,
-     *     minMessage="The name is too short.",
-     *     maxMessage="The name is too long.",
+     *     minMessage="The code is too short.",
+     *     maxMessage="The code is too long.",
      *     groups={"Profile"}
      * )
      */
     protected $googlePlusId;
-
-    /**
-     * @ORM\Column(name="is_google_plus_public", type="boolean", length=100, nullable=false)
-     */
-    protected $isGooglePlusAccountPublic = 0;
 
     /**
      * @ORM\Column(name="date_created", type="datetime")

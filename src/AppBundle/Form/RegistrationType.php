@@ -9,18 +9,12 @@ class RegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('firstname');
-        $builder->add('surname');
+        // todo - add fields if necessary
     }
 
     public function getParent()
     {
         return 'FOS\UserBundle\Form\Type\RegistrationFormType';
-    }
-
-    public function getBlockPrefix()
-    {
-        return 'app_user_registration';
     }
 
     // For Symfony 2.x
