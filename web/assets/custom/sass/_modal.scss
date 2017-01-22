@@ -1,5 +1,11 @@
-#login-modal {
-  .card {
-    margin: 0;
+.modal {
+  &.modal-transparent {
+    background: none;
+    box-shadow: none;
   }
+
+  .card {
+      margin: 0;
+    }
+
 }

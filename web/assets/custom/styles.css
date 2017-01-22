@@ -64,6 +64,8 @@ nav .nav-wrapper {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover; }
+.side-nav a.btn {
+  color: #fff; }
 
 html {
   height: 100%; }
@@ -75,6 +77,12 @@ body {
   -o-background-size: cover;
   background-size: cover; }
 
+header, main, footer {
+  padding-left: 300px; }
+
+@media only screen and (max-width: 992px) {
+  header, main, footer {
+    padding-left: 0; } }
 .collection .collection-item .switch {
   display: inline-block;
   float: right; }
@@ -127,7 +135,10 @@ body {
 .post .material-icons {
   vertical-align: middle; }
 
-#login-modal .card {
+.modal.modal-transparent {
+  background: none;
+  box-shadow: none; }
+.modal .card {
   margin: 0; }
 
 .btn.background-facebook {

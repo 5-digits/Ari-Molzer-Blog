@@ -30,7 +30,7 @@ class BlogController extends Controller
     public function postIndexAction()
     {
         // Get the current signed-in user
-        $user = $this->get('session')->get('user');
+        $user = $this->getUser();
 
         // get all blog posts
         $postsPerPage = 3;
@@ -308,7 +308,8 @@ class BlogController extends Controller
     /**
      * @Route("/post/like/{postId}", name="post_like")
      */
-    public function likePostAction($postId) {
+    public function likePostAction($postId)
+    {
 
         $user = $this->getUser();
 
@@ -368,7 +369,8 @@ class BlogController extends Controller
     /**
      * @Route("/post/bookmark/{postId}", name="post_bookmark")
      */
-    public function bookmarkPostAction($postId) {
+    public function bookmarkPostAction($postId)
+    {
 
         $user = $this->getUser();
 
@@ -421,6 +423,27 @@ class BlogController extends Controller
         return New JsonResponse(
             JsonResponse::HTTP_OK
         );
+    }
+
+    /**
+     * @Route("/post/stats/", name="post_stats_endpoint")
+     * @Route("/post/stats/{postId}", name="post_stats")
+     */
+    public function statsModalAction($postId)
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return New JsonResponse(ErrorMessage::ERROR_INSUFFICIENT_PERMISSION);
+        }
+
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Post');
+        $blogPost = $repository->findOneById($postId);
+
+        return $this->render(':Blog/components:statistics-modal.html.twig', array(
+            'post' => $blogPost,
+            'user' => $user
+        ));
     }
 
 }

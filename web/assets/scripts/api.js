@@ -6,6 +6,7 @@ var APIModule = (function () {
 
     var postLikeEndpoint = '/post/like/{id}';
     var postBookmarkEndpoint = '/post/bookmark/{id}';
+    var postStatsModalEndpoint = '/post/stats/{id}';
 
     var likePost = function(postId) {
         return $.ajax({
@@ -19,9 +20,16 @@ var APIModule = (function () {
         });
     };
 
+    var postStatsModal = function (postId) {
+        return $.ajax({
+            url: postStatsModalEndpoint.replace('{id}', postId)
+        });
+    };
+
     return {
         likePost: likePost,
-        bookmarkPost: bookmarkPost
+        bookmarkPost: bookmarkPost,
+        postStatsModal: postStatsModal
     };
 
 })();

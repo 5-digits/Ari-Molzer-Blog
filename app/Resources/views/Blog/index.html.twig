@@ -4,11 +4,9 @@
 {% block body %}
 
 <div class="section">
-    <div>
         {% for post in posts %}
             {{ include('blog/components/card-horizontal.html.twig', { 'post': post }) }}
         {% endfor %}
-    </div>
 
     {% if pagination %}
         {{ include(':shared/components:pagination.html.twig', { 'pagination': pagination }) }}

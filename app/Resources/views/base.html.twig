@@ -52,27 +52,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     </head>
+
+
     <body>
-
-        {{ include(':shared/components:side-navigation.html.twig') }}
-
-        {{ include(':shared/components:search.html.twig') }}
 
         {{ include(':shared/components:flashbag.html.twig') }}
 
+        <header>
+            {{ include(':shared/components:header.html.twig') }}
 
+        </header>
 
-        <div class="container">
-            {% block body %}{% endblock %}
-        </div>
+        <main>
+            <div class="container">
+                {% block body %}{% endblock %}
+            </div>
+        </main>
 
         <!-- Include required JS scripts and JS block -->
-        {#{{ include('shared/includes/firebase.html.twig') }}#}
         {% block javascripts %}{% endblock %}
 
         <script src="{{ asset('assets/scripts/api.js') }}"></script>
         <script src="{{ asset('assets/scripts/post_bookmark.js') }}"></script>
         <script src="{{ asset('assets/scripts/post_like.js') }}"></script>
+        <script src="{{ asset('assets/scripts/post_stats_modal.js') }}"></script>
 
     </body>
 </html>
